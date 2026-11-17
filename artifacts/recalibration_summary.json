@@ -1,0 +1,38 @@
+{
+  "recalibrated_at": "2026-11-16T22:20:07.649780+00:00",
+  "calibrator_features": [
+    "lexical_lr_logit",
+    "lexical_svm_score",
+    "semantic_logit",
+    "heuristic_score"
+  ],
+  "spam_threshold": 0.706775,
+  "suspicious_threshold": 0.31,
+  "val_tune_metrics": {
+    "threshold": 0.706775,
+    "precision": 0.949045,
+    "recall": 0.719112,
+    "f1": 0.818232,
+    "fpr": 0.009657,
+    "fnr": 0.280888,
+    "tp": 745,
+    "fp": 40,
+    "tn": 4102,
+    "fn": 291,
+    "predicted_spam": 785
+  },
+  "suspicious_metrics": {
+    "threshold": 0.31,
+    "precision": 0.815385,
+    "recall": 0.869691,
+    "f1": 0.841663,
+    "fpr": 0.049252,
+    "fnr": 0.130309,
+    "tp": 901,
+    "fp": 204,
+    "tn": 3938,
+    "fn": 135,
+    "predicted_spam": 1105
+  },
+  "used_semantic": true
+}

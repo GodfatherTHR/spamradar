@@ -1,0 +1,34 @@
+{
+  "model_name": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "max_seq_length": 64,
+  "batch_size": 64,
+  "embedding_dim": 384,
+  "best_C": 0.5,
+  "grid_results": [
+    {
+      "C": 0.5,
+      "pr_auc": 0.90261,
+      "f1": 0.83173
+    },
+    {
+      "C": 1.0,
+      "pr_auc": 0.90254,
+      "f1": 0.83175
+    },
+    {
+      "C": 2.0,
+      "pr_auc": 0.90247,
+      "f1": 0.83149
+    },
+    {
+      "C": 4.0,
+      "pr_auc": 0.90245,
+      "f1": 0.83138
+    }
+  ],
+  "val_metrics": {
+    "C": 0.5,
+    "pr_auc": 0.90261,
+    "f1": 0.83173
+  }
+}

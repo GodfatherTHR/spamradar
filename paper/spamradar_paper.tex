@@ -1,0 +1,667 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+
+\title{Catching Multilingual Spam on a CPU: A Hybrid Detector with Review Tiers}
+\author{%
+Md. Toriqul Haque\\
+University of Scholars\\
+\href{mailto:toriqulhaque27@gmail.com}{toriqulhaque27@gmail.com}\\[0.6em]
+\href{https://github.com/GodfatherTHR/spamradar}{\includegraphics[height=10pt]{logos/github_logo.png}~GitHub}\quad
+\href{https://toriqulhaque-spamradar.static.hf.space/index.html}{\includegraphics[height=10pt]{logos/hf_logo.png}~Live demo}%
+}
+\date{November 2026}
+
+\hypersetup{
+  pdftitle={Catching Multilingual Spam on a CPU: A Hybrid Detector with Review Tiers},
+  pdfauthor={Md. Toriqul Haque},
+  pdfsubject={Multilingual spam and social engineering detection},
+  pdfkeywords={spam detection, smishing, social engineering, multilingual NLP, calibration, ONNX, CPU inference}
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+I built this detector after a small English model failed on the first Bengali scam message I tried. The message was short, polite, and asked for a bKash payment. The old model saw none of the usual English spam words and scored it as normal. That failure set the direction for the work.
+
+The detector reads short messages in English, Bengali, Banglish, Hindi, Hinglish, Spanish, French, Arabic, and mixed script text. It combines character and word n-grams, 100 hand-built scam signals, a frozen multilingual MiniLM encoder, a calibrated stacker, and a small set of high-confidence rules. The corpus has 150,913 messages after exact and near-duplicate removal. On a held-out test set with a 20 percent spam prior, it reaches a PR AUC of 0.9385, an F1 of 0.8315, a precision of 94.9 percent, a recall of 74.0 percent, a false-positive rate of 0.99 percent, and an ECE of 0.0039. The 150-case adversarial suite gives a 97.33 percent strict pass rate, a 99.33 percent soft pass rate, and no false blocks. The INT8 ONNX encoder runs in 7.5 ms for one message, and a warmed single message API call takes about 15 ms on a four-core Intel i3 CPU. I also report the branch ablations, the per-language results, and the failures that changed the design.
+\end{abstract}
+
+\noindent\textbf{Keywords:} multilingual spam detection, smishing, social engineering, code-mixed text, calibration, ONNX, CPU inference
+
+\section{Introduction}
+
+The first version was a DeBERTa v3 extra small classifier with 70.7 million parameters. I trained it on 40 messages, 20 spam and 20 normal, and saved the weights as \texttt{spam\_detector.weights.h5}. It could separate those 40 examples. Then I pasted a Bengali message about a suspended bKash account and it called the message normal. The model had never seen Bengali, and threshold tuning was not going to fix that. I kept the \texttt{.h5} file as a reminder and started over.
+
+Short messages are a bad fit for a lot of standard text classification advice. They arrive without context, often from an unknown number, and they mix languages in the same sentence. A message can say ``Aapka KYC pending hai'' in Romanized Hindi, include an English link, and end with a Bengali amount. A keyword list will miss the next version of that message. A character n-gram model does better because it can learn fragments such as ``kyc'', ``pending'', and the shape of an obfuscated domain without needing a dictionary.
+
+The class balance is another problem. Spam is rare in a normal inbox, so a model that catches most of it can still be useless if it blocks one percent of legitimate messages. A blocked bank alert or a missing delivery code costs more than a missed promotional message. I wanted a filter with a measured false-positive rate, not a single accuracy number at a threshold of 0.5.
+
+The last constraint was the machine. The experiments ran on a Windows 11 desktop with an Intel Core i3-10100, four cores, eight hardware threads, and 16 GB of RAM. There was no GPU. A 278-million-parameter mDeBERTa base model was not realistic for training or serving here. Whatever I built had to train on the CPU and answer a request in milliseconds.
+
+The rest of the system is a data pipeline, a hybrid model, a three-tier decision layer, an INT8 CPU path, and an evaluation that includes the failures. The pipeline merges public corpora, writes synthetic scams and hard negatives, removes duplicates before splitting, and keeps template groups out of the test set. The model combines sparse lexical features, 100 signals, a frozen multilingual encoder, and a calibrated stacker. The decision layer adds a review tier and a small rule set. The encoder is exported to INT8 ONNX and measured on the CPU. The evaluation reports held-out metrics, per-language and per-category results, and a 150-case adversarial suite. I start with related work, then describe the data, the model, the results, and the parts that still fail.
+
+\section{Related work}
+
+\subsection{Classical spam filtering}
+
+Spam filtering has a long baseline literature. Sahami et al. applied a Bayesian approach to junk email filtering \cite{sahami1998}. Almeida et al. released the UCI SMS Spam Collection, which became a common benchmark for SMS spam research \cite{almeida2011}. I used the UCI set as a sanity check, not as the main corpus. It is small and mostly English, and the scams I cared about were not well-represented in it.
+
+Logistic regression and linear support vector machines with TF-IDF features are still hard to beat on short text \cite{pedregosa2011}. They are fast, easy to inspect, and work well with sparse features. Their weakness is surface form. A message that turns ``bitly'' into ``bit[.]ly'', or writes a Bengali word in Latin letters, can move away from the training distribution without changing its meaning. He and Garcia describe the related problem of learning from imbalanced data \cite{he2009}. Saito and Rehmsmeier show why the precision-recall curve is more useful than the ROC curve when the positive class is rare \cite{saito2015}. I report PR AUC, precision, recall, F1, and the false-positive rate at a fixed threshold for that reason.
+
+\subsection{Smishing and social engineering}
+
+Phishing research has looked at URLs, sender reputation, page content, and user behavior. Khonji et al. survey phishing detection \cite{khonji2013}. Salahdine and Kaabouch describe how persuasion, urgency, authority, and fear do most of the work in social engineering attacks \cite{salahdine2019}. Mishra and Soni apply SMS text classification to smishing \cite{mishra2020}. More recent work adds text normalization, federated learning, multi-signal tagging, and robustness testing \cite{goel2024,goel2025,remmide2025,hosseinpour2025,salman2026}.
+
+The examples show why surface words fail. ``I sent you too much by mistake, send a small part back'' is a payment scam with no threat or prize. ``I am a soldier overseas, I need money for a visa'' is a romance scam with no link. A model that only counts words such as ``winner'' or ``urgent'' will miss both.
+
+Hard negatives matter just as much. A real OTP message says ``Do not share this code''. A real delivery message says ``The courier will ask for the OTP at your door''. A real bank message says ``Your account was debited''. A real friend says ``Can you send me five dollars for lunch? I will pay you back.'' A naive keyword model can flag every one of those. I built a large hard negative pool and put uncertain messages in a review tier, so a false positive does not become a block.
+
+\subsection{Multilingual and code-mixed representations}
+
+BERT introduced deep bidirectional pretraining \cite{devlin2019}. XLM-R extended the idea to 100 languages with a shared vocabulary \cite{conneau2020}. DeBERTa v3 improved pretraining with replaced token detection and disentangled attention \cite{he2023}. MiniLM showed that a smaller student model can keep much of the quality of a larger transformer \cite{wang2020}. Sentence-BERT and Sentence Transformers made fixed-size sentence embeddings easy to reuse \cite{reimers2019,wolf2020}.
+
+Code-mixed text is still difficult. Sitaram et al. survey code-switched speech and language processing and describe the lack of labeled data, the mixed scripts, and the language identification problem \cite{sitaram2019}. Romanized Bengali and Hindi add another layer because the same sound can be written several ways. A character n-gram model handles that without a word boundary or a dictionary. A multilingual sentence encoder adds semantic coverage. I use both.
+
+The recent evidence supports that choice. Yadav et al. evaluate monolingual, bilingual, and massively multilingual models on code-mixed text and find that fine-tuned bilingual and multilingual models are strong, while very large generative models are not always better \cite{yadav2024}. Sachan et al. use multilingual sentence embeddings for SMS spam \cite{sachan2025}. Amaral Cejas et al. compare multilingual embedding models for telecom-scale SMS fraud detection \cite{amaral2026}. I did not have the data or the hardware to train a large multilingual model from scratch, so I used a compact public encoder and put most of the adaptation in the features and the calibration.
+
+\subsection{Calibration, imbalance, and operating points}
+
+A classifier score is not automatically a probability. Guo et al. show that modern neural networks are often poorly calibrated and that a simple post hoc method can help \cite{guo2017}. Geng et al. survey confidence estimation and calibration for large language models and make the same point about raw scores \cite{geng2024}. This matters in production because a score of 0.8 should mean that about 80 percent of such messages are spam. If the score is only a ranking signal, the review tier is built on sand.
+
+The cost of a false positive is not the same as the cost of a false negative. Lin et al. proposed focal loss to focus training on hard examples \cite{lin2017}. He and Garcia discuss resampling and cost-sensitive learning \cite{he2009}. I use class weights for the linear models, focal loss in the optional transformer path, and a validation-fit stacker for calibration. The final threshold is selected under a false-positive constraint, not at 0.5.
+
+\subsection{Leakage, deduplication, and evaluation}
+
+SMS corpora contain duplicates and near-duplicates. If the same message, or a lightly edited version, appears in both training and test, the test score is optimistic. Charikar's SimHash gives a compact similarity estimate for near-duplicate detection \cite{charikar2002}. I remove exact duplicates with a normalized hash and near-duplicates with 64-bit SimHash and locality sensitive hashing. I do this before splitting, not after. The split is group-aware, so a synthetic template or a duplicate cluster stays on one side of the boundary.
+
+The adversarial suite needed the same check. My first suite had 15 exact overlaps with training and several near-duplicates. The pass rate looked excellent, which was the warning. I rewrote those cases and reran the suite. The result was lower and more useful.
+
+\subsection{Efficient inference}
+
+Most spam papers report model quality but not deployment cost. MiniLM provides a compact transformer \cite{wang2020}. ONNX Runtime provides a cross-platform inference engine with CPU optimizations \cite{onnxruntime}. Rauf et al. show that 4-bit quantization and QLoRA can make 3--4 billion-parameter models usable on small GPUs, but the best model still needs several gigabytes of memory \cite{rauf2026}. I wanted a much smaller footprint. I export the multilingual encoder to FP32 and INT8 ONNX, compare the exported embeddings with PyTorch, and measure batch latency on the CPU. The final service uses the INT8 encoder and the lexical branch.
+
+\subsection{Recent work, 2023--2026}
+
+The 2023--2026 literature is mostly a story of larger transformers and better normalization. Uddin et al. fine-tune RoBERTa for SMS spam and report 99.84 percent accuracy with explainability analysis \cite{uddin2024}. Oyeyemi and Ojo combine BERT features with classical classifiers and report 97.31 percent accuracy \cite{oyeyemi2024}. Maheshwari et al. release a new SMS spam dataset with four spam categories and show that BERT-based short-text representations improve over handcrafted features \cite{maheshwari2024}. Koide et al. use GPT-4 for phishing email detection and report 99.70 percent accuracy with reasoning text \cite{koide2024}. Shirvani and Ghasemshirazi use BERT and zero-shot FLAN-T5 to reduce the need for labeled data \cite{shirvani2025}.
+
+The numbers are high, often above 99 percent. I do not compare my results directly to them because the datasets and the operating points are different. What matters for this project is that most of these systems assume a large model or a GPU, and few report a false-positive rate at a fixed low threshold. A 99.84 percent accuracy on a balanced benchmark does not tell a small operator what will happen to a normal bank alert.
+
+Smishing work has moved toward normalization, privacy, and robustness. Goel et al. normalize slang and short forms before classification and report 96.2 percent accuracy with a 3.87 percent false-positive rate \cite{goel2024}. Goel later presents a content-based model with similar normalization \cite{goel2025}. Remmide et al. use federated Bi-LSTM to keep user data local and report 88.78 percent accuracy \cite{remmide2025}. Hosseinpour and Das combine country-specific semantic tags, structural tags, character cues, and phrase embeddings, and report 97.89 percent accuracy and 0.963 F1 on a relabeled set of more than 84,000 messages \cite{hosseinpour2025}. Their multi-signal design is close to the signal layer I built. Salman et al. test real SMS anti-spam systems under perceptible and imperceptible attacks and show that robustness does not transfer well across attack families \cite{salman2026}. That finding is why I kept the adversarial suite separate from the training data and why the rules have exceptions.
+
+Multilingual and efficient deployment work is closer to my constraints. Sachan et al. use a multilingual sentence encoder and AutoML for SMS spam \cite{sachan2025}. Amaral Cejas et al. compare four multilingual embedding models on a telecom-scale SMS fraud task \cite{amaral2026}. Filali et al. use GAN-based augmentation with BERT and Bi-LSTM for cross-lingual SMS spam and report 94.44 percent F1 on a multilingual set \cite{filali2026}. Rauf et al. fine-tune 4-bit quantized Gemma 3, Qwen 3, and Llama 3.2 models with QLoRA on a 21-language synthetic corpus and report 90 percent accuracy and 0.88 F1 for the best model \cite{rauf2026}. Those models still need several gigabytes of memory. My INT8 encoder is 118 MB, and that size difference is the reason I chose the hybrid design.
+
+Yadav et al. find that fine-tuned bilingual and multilingual models are strong on code-mixed text, while very large generative models are not competitive for their tasks \cite{yadav2024}. Geng et al. show that confidence scores need calibration before they are used as probabilities \cite{geng2024}. Ghourabi and Alohaly combine transformer embeddings with ensemble learning for SMS spam \cite{ghourabi2023}. I took the compact encoder, the calibrated stacker, and the review tier from those lessons.
+
+\subsection{Research gap}
+
+The gap I care about is deployment. Many studies are English-only, use small or noisy datasets, report a single F1 score at 0.5, ignore near-duplicate leakage, and do not measure CPU latency. Modern scams are also different from the classic lottery and pharmacy spam in the UCI collection. I wanted one reproducible system that handled all of those issues, even if it did not win a public leaderboard. The corpus, the split, and the operating point are different from prior work, so the numbers should be read as an engineering evaluation, not as a claim of state of the art.
+
+\section{Data}
+
+\subsection{Sources}
+
+I started with 212,581 rows from public SMS and scam corpora plus synthetic templates. Table \ref{tab:sources} shows where they came from and how many rows each source contributed after the source cap. The total dropped to 212,386 after removing empty or very short rows.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Data sources before deduplication. The synthetic rows are generated by the template module.}
+\label{tab:sources}
+\begin{tabularx}{\textwidth}{Xrrr}
+\toprule
+Source & Rows & Spam & Ham \\
+\midrule
+ScamShield multilingual smishing & 72,000 & 27,507 & 44,493 \\
+UCI SMS Spam Collection & 5,572 & 747 & 4,825 \\
+Bengali SMS smishing & 7,005 & 4,517 & 2,488 \\
+Hindi SMS spam and ham & 15,000 & 7,500 & 7,500 \\
+Arabic SMS spam & 630 & 200 & 430 \\
+Spanish SMS Mexico & 300 & 165 & 135 \\
+French spam and ham & 2,000 & 1,000 & 1,000 \\
+Merged SMS scam corpus & 48,000 & 20,915 & 27,085 \\
+Promotional and service SMS & 42,000 & 21,282 & 20,718 \\
+A2P and P2P SMS & 8,304 & 767 & 7,537 \\
+Phishing urgency and authority & 1,000 & 1,000 & 0 \\
+Synthetic multilingual templates & 10,770 & 5,460 & 5,310 \\
+\midrule
+\textbf{Total} & \textbf{212,581} & \textbf{91,060} & \textbf{121,521} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The real sources cover different regions and styles. The ScamShield rows include English, Hindi, and Hinglish examples, with UPI fraud, fake KYC, courier scams, loan scams, and lottery messages. The Bengali set has Bengali, Banglish, English, and code-mixed rows. The Hindi, Arabic, Spanish, and French sources add script and language diversity. The merged SMS corpus and the promotional and service corpus add normal bank alerts, OTP notices, delivery updates, and promotional messages. The A2P and P2P rows are useful hard negatives because they contain casual chat and transaction alerts. The phishing urgency set adds English phishing examples. The UCI set is familiar, but it is a small part of the final corpus.
+
+\subsection{Cleaning and language handling}
+
+I normalize every row with Unicode NFKC, remove zero-width and control characters, and collapse whitespace. URLs are defanged for analysis and refanged for feature extraction. A string such as \texttt{bit[.]ly}, \texttt{hxxps://}, or \texttt{w.a.l.m.a.r.t} becomes a canonical URL before the features are computed. The parser extracts URLs, domains, emails, phone numbers, amounts, OTP codes, and crypto addresses. It records whether a URL is a shortener, a suspicious top-level domain, an IP address, a punycode host, an obfuscated link, or a URL with embedded credentials.
+
+Language detection uses script counts and marker words. The final groups are English, Bengali, Banglish, Hindi, Hinglish, Spanish, French, Arabic, mixed, and other or rare. Bengali script maps to Bengali, Devanagari to Hindi, and Arabic script to Arabic. Latin script is assigned with conservative marker counts for Hinglish, Banglish, Spanish, and French, with English as the default. If two scripts are both significant, the row is marked as mixed.
+
+My first language detector was too eager. It called short English SMS messages Spanish or French, which inflated those groups and made their results look better than they were. I replaced it with the conservative detector described here, rebuilt the dataset, and reran the splits. The detector is simple and deterministic. It is not a full language identification model, but it is good enough for grouping and for the per-language tables, and I can debug it when a row lands in the wrong group.
+
+\subsection{Synthetic augmentation}
+
+Public SMS corpora miss many modern scams. I wrote a template generator that produces scam messages and hard negatives for eight languages plus mixed script text. The scam families include peer-to-peer bait, crypto doubling, lottery and prize messages, fake bank and KYC alerts, delivery and OTP fraud, fake jobs, romance scams, marketplace deposit scams, loan and investment offers, tech-support scams, and promotional blasts. The hard negatives include personal chat, legitimate bank alerts, OTP warnings, delivery updates, work messages, marketplace negotiations, opt-in promotions, urgent family messages, normal money requests, meeting links, KYC reminders, and refunds.
+
+Templates are combined with openers, calls to action, names, amounts, currencies, URLs, phone numbers, OTP codes, and item names. Some scam URLs are obfuscated with bracket dots, spaced letters, hxxp prefixes, zero-width characters, or leetspeak. Hard negatives deliberately contain money words, urgent words, bank names, OTP words, and legitimate URLs. A hard negative says ``Bro can you send me five dollars for lunch? I will pay you back tomorrow.'' Another says ``The delivery agent will ask for a four-digit OTP at your door. Please share it only after the package arrives.'' These examples teach the model that money or OTP words alone are not enough.
+
+The first template pass had bugs. Some rows had blank phone slots, some repeated the currency word, and one repeated the string ``ending 4421'' after the amount. I fixed those before training. The generator is not a substitute for real traffic, and I treat it as coverage for scam families that the public corpora do not contain.
+
+\subsection{Deduplication and splitting}
+
+I remove exact duplicates with a hash of the normalized text. Then I compute a 64-bit SimHash for each row, use four LSH bands, and merge rows with a Hamming distance of at most three. One representative is kept per cluster. If a cluster has conflicting labels, it is kept only when one label has at least 80 percent of the rows and the cluster has at least three rows. Otherwise the cluster is dropped as ambiguous. This step removed 61,473 rows and left 150,913.
+
+The split is group-aware. Real rows that survive a duplicate cluster form one group. Synthetic rows keep their template group. Groups are split into train, validation, and test with stratification on the label and language key. Rare strata are merged. The final split has 120,659 training rows, 15,045 validation rows, and 15,162 test rows. A 20 percent spam prior validation pair is created as \texttt{val\_cal} and \texttt{val\_tune}, with 5,177 and 5,178 rows. A 20 percent prior test set has 10,392 rows. The full test has a 45.2 percent spam prior because it is built from merged spam and ham corpora. Table \ref{tab:splits} shows the sizes.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Leakage-safe splits. The realistic test set is a 20 percent prior subset of the test split.}
+\label{tab:splits}
+\begin{tabular}{lrrrr}
+\toprule
+Split & Rows & Spam & Ham & Spam prior \\
+\midrule
+Train & 120,659 & 54,232 & 66,427 & 44.9\% \\
+Validation & 15,045 & 6,761 & 8,284 & 44.9\% \\
+Test & 15,162 & 6,848 & 8,314 & 45.2\% \\
+Validation calibration & 5,177 & 1,035 & 4,142 & 20.0\% \\
+Validation tuning & 5,178 & 1,036 & 4,142 & 20.0\% \\
+Realistic test & 10,392 & 2,078 & 8,314 & 20.0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The audit found zero exact hash overlap between train and validation, train and test, and validation and test. It also found zero group overlap. The adversarial suite was checked separately. It has 150 cases, 73 spam and 77 ham, across nine language groups. An exact hash check found no overlap with training. A SimHash audit on a 30,000-row training sample found no case with a Hamming distance of three or less. That was after the rewrite, not before.
+
+\section{Method}
+
+\subsection{Decision problem}
+
+Let $x$ be a message and let $p(x)$ be the calibrated spam probability. I use two thresholds, a review threshold $\tau_r$ and a spam threshold $\tau_s$. The base decision is:
+\begin{equation}
+\hat{y}(x)=
+\begin{cases}
+\text{SPAM}, & p(x) \geq \tau_s,\\
+\text{SUSPICIOUS}, & \tau_r \leq p(x) < \tau_s,\\
+\text{NORMAL}, & p(x) < \tau_r.
+\end{cases}
+\end{equation}
+
+A small rule layer can raise a message to SPAM or SUSPICIOUS when a high-confidence pattern is present. The rules never lower a label. The final thresholds are $\tau_s = 0.706775$ and $\tau_r = 0.310000$. I selected the spam threshold on the validation tuning split to maximize recall while keeping the false-positive rate at or below one percent. The review threshold was selected for a five percent review rate and is capped below the spam threshold.
+
+\subsection{Lexical and signal branch}
+
+The lexical branch has two sparse TF-IDF views. The first uses character n-grams with \texttt{char\_wb} and a range from two to five, capped at 180,000 features. The second uses word n-grams from one to two, capped at 110,000 features. Both use sublinear term frequency, a minimum document frequency of two, and a maximum document frequency of 0.995. Before vectorization, URLs, emails, phones, amounts, and OTP codes are replaced with placeholders, and the most relevant URL domains are kept as tokens.
+
+I chose \texttt{char\_wb} because it sees word boundaries without requiring a dictionary. It can learn the shape of ``bKash'', ``bikash'', and ``bkash'' from the same few character sequences. The word view adds phrases such as ``send money'' and ``account suspended'' that are easy for a linear model to use.
+
+The signal branch adds 100 numeric features. They cover message length, token count, digit and alpha ratios, uppercase ratio, punctuation, emoji count, URL count, shortener count, suspicious top-level domains, IP URLs, obfuscated URLs, punycode, URLs with credentials, email count, phone count, amount count, OTP count, crypto address count, and crypto amount count. They also count lexicon matches for urgency, reward, threat, authority, payment, investment, job, romance, delivery, OTP, marketplace, and peer-to-peer verbs. Script shares and code-mixing flags are included. Composite flags cover unrealistic exchange, account threat, delivery fee, OTP theft, crypto scam, job scam, romance scam, marketplace scam, loan or investment bait, impersonation, pressure tactics, and too-good-to-be-true language.
+
+The lexical classifier is a logistic regression with balanced class weights. I evaluate a small C grid on a 40,000-row language-stratified sample. The grid is 1, 2, 4, 8, and 16. The best value was C equal to 8, with a validation PR AUC of 0.9723 and an F1 at 0.5 of 0.9062. I also train a linear support vector machine with C equal to 1. It reaches a validation PR AUC of 0.9616 and an F1 at 0 of 0.8935. Both the logistic probability and the SVM margin go to the stacker.
+
+\subsection{Multilingual semantic branch}
+
+The semantic branch uses the multilingual MiniLM model
+\texttt{paraphrase-\allowbreak multilingual-\allowbreak MiniLM-\allowbreak L12-\allowbreak v2}.
+I froze the encoder. A 32,000-row language-stratified sample is encoded at a maximum length of 64 tokens. The resulting 384 dimensional vectors are normalized and standardized. A logistic regression head with balanced class weights is trained on the embeddings. The C grid is 0.5, 1, 2, and 4. The best value was C equal to 0.5, with a validation PR AUC of 0.9026 and an F1 at 0.5 of 0.8317.
+
+The freeze was a practical choice. My first semantic run encoded 56,000 rows and was still going after an hour. I stopped it, exported the encoder to ONNX, and capped the semantic sample at 32,000. The optional Keras two-stage trainer in \texttt{src/keras\_transformer.py} implements head warmup, partial unfreezing, focal loss, cosine decay with warmup, gradient clipping, and native gradient accumulation for a GPU environment. The public multilingual KerasHub presets in this build were missing their tokenizer assets, so I could not validate that path. The tested production path uses the Hugging Face MiniLM encoder.
+
+\subsection{Calibration and stacking}
+
+The stacker receives four values: the logit of the lexical logistic probability, the SVM margin, the logit of the semantic probability, and the heuristic signal score. It is a logistic regression with no class weighting, fit on \texttt{val\_cal}, which has a 20 percent spam prior. The stacker learns to blend the branches and to calibrate the output to a deployment-like prior. I tune the threshold on \texttt{val\_tune}, which is disjoint from the calibration split.
+
+The separation matters. If I fit the stacker and the threshold on the same rows, the threshold can overfit the calibration sample and the reported false-positive rate can look better than it is. One half of the realistic validation set handles calibration and the other handles threshold selection.
+
+\subsection{Rule escalation}
+
+The rule layer is small and conservative. It escalates only when a high-confidence pattern is present. The patterns are: unrealistic peer-to-peer exchange or money doubling; a remote OTP or verification code request; a delivery or customs fee paired with a suspicious link; an account threat or KYC request paired with a suspicious link; a seed phrase or wallet recovery request; a fake mistaken transfer that asks the victim to send part of the money back; a marketplace deposit or shipping trap; a prize or refund claim paired with a suspicious link; an upfront fee job offer; and a tech-support call that asks for remote access.
+
+A legitimate delivery message may tell the customer to share the OTP with the delivery agent at the door, so the OTP rule looks for a remote request and skips a local handoff phrase such as ``share it only after the package arrives''. A normal marketplace listing may say ``pickup only'' and ``no shipping'', so the deposit rule skips those listings.
+
+I added the rule layer after the first adversarial pass produced two false blocks. One was a normal PS5 listing that matched an overbroad item rule. The other was a Banglish OTP warning that said not to share the code; the rule read it as an OTP theft request. I tightened both rules and reran the suite. The rules support the model. They do not replace it, and the API returns the decision source so a user can see when a rule made the call.
+
+\subsection{Training and implementation}
+
+The production stack is Python 3.12, scikit-learn 1.7, sentence-transformers 5.2, PyTorch 2.8, ONNX Runtime 1.26, FastAPI \cite{fastapi}, and a small HTML, CSS, and JavaScript front end. The lexical feature fit took 112.5 seconds on the test CPU. The train and validation transforms took 674.9 seconds because the signal branch analyzes every row. The final logistic regression took 286.6 seconds and the linear SVM took 637.9 seconds. The semantic training sample took about eight minutes to encode with the INT8 ONNX encoder, and the validation and test sets took about four minutes each. The full pipeline is reproducible with the commands in the project README.
+
+The Keras path uses eager tokenization with a fixed sequence length and a classifier with no internal preprocessor. This avoids the TensorFlow graph tracing problem that can occur on Windows when a SentencePiece tokenizer is used inside a \texttt{tf.data} pipeline. The Keras path also sets the logging and oneDNN environment variables before importing TensorFlow, uses micro batches, and uses native gradient accumulation. It is not used by the production CPU service. I left the code in the repository and marked it as optional because I would rather show an untested path than pretend it works.
+
+The pipeline logs looked empty while it was running because Python buffered stdout. I checked CPU and memory instead and let the long jobs finish. That is not a modeling result, but it changed how I ran the experiments.
+
+\subsection{Inference path}
+
+The inference path has four parts: normalization and signal extraction, lexical vectorization and linear scoring, ONNX encoding and semantic scoring, and calibration and rule checks. The encoder is exported to FP32 and INT8 ONNX. The INT8 model has a cosine similarity of 0.987 with the PyTorch embeddings on the validation sample. The FP32 model matches the PyTorch embeddings exactly.
+
+The first request took 944 ms. I expected the transformer to be the problem. It was the explanation function, which rebuilt the 290,100 feature name strings on every message. That step took 500--700 ms. Caching the names brought the full single message call to about 15--21 ms. The browser interface reports a larger number, around 33 ms, because it includes the HTTP request and rendering. I also added a startup warmup so the first real request does not pay the cold path cost.
+
+The full INT8 file is 118 MB. The FP32 file is 470 MB. Only the INT8 file belongs in a deployment. I also packaged the lexical branch as a browser demo that runs in Pyodide. It needs no server and is useful for a public demo, but it does not load the semantic encoder and it is not the 15 ms path.
+
+\section{Results}
+
+\subsection{Setup and metrics}
+
+All experiments ran on a Windows 11 machine with an Intel Core i3-10100 CPU, four cores, eight hardware threads, and 16 GB of RAM. There was no GPU. I evaluated the model on the held-out test split and on the realistic 20 percent prior subset. The main metrics are PR AUC, ROC AUC, precision, recall, F1, false-positive rate, false-negative rate, Brier score, expected calibration error, accuracy, and the confusion matrix. The per-language and per-category tables use the selected spam threshold.
+
+The adversarial suite is scored with the production decision layer, which includes the rule escalation. The strict pass metric requires an exact label match. A spam message that lands in SUSPICIOUS is a strict miss but not a silent miss. The soft pass metric counts SUSPICIOUS as a pass for a spam message. The block safe metric checks that no normal message is labelled SPAM.
+
+\subsection{Main results}
+
+Table \ref{tab:main} gives the numbers I would use in a deployment discussion. On the realistic 20 percent prior test set the detector reaches a PR AUC of 0.9385, a ROC AUC of 0.9786, an F1 of 0.8315, a precision of 94.9 percent, a recall of 74.0 percent, a false-positive rate of 0.99 percent, and an expected calibration error of 0.0039. On the full test set, which has a 45.2 percent spam prior, the PR AUC is 0.9748, the ROC AUC is 0.9773, the F1 is 0.8361, the precision is 98.4 percent, the recall is 72.7 percent, and the false-positive rate is 0.99 percent.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Held-out results at the selected spam threshold of 0.706775. The realistic test set has a 20 percent spam prior.}
+\label{tab:main}
+\begin{tabularx}{\textwidth}{Xrrrrrrrrr}
+\toprule
+View & PR AUC & ROC AUC & F1 & Precision & Recall & FPR & ECE & Brier & Accuracy \\
+\midrule
+Realistic 20\% prior & 0.9385 & 0.9786 & 0.8315 & 94.94\% & 73.97\% & 0.99\% & 0.0039 & 0.0413 & 94.01\% \\
+Full test & 0.9748 & 0.9773 & 0.8361 & 98.38\% & 72.69\% & 0.99\% & 0.0210 & 0.0714 & 87.13\% \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The precision is high because I tuned for a low false-positive rate. The recall is lower than a 0.5 threshold would give. That is the trade I chose. In a messaging filter, a false block can lose an important bank alert, a delivery code, or a family message. A review tier lets the user inspect uncertain cases without blocking them. The realistic test accuracy is 94.0 percent, and the ECE is close to zero, which suggests the probabilities are useful for the review tier.
+
+\subsection{Branch ablation}
+
+Table \ref{tab:ablation} compares the branches by PR AUC and ROC AUC. The signal-only branch is a weak ranker, with a PR AUC of 0.6671 on the full test set and 0.4512 on the realistic test set. The lexical branch is strong, with a PR AUC of 0.9746 and a ROC AUC of 0.9771 on the full test. The semantic branch alone is weaker, with a PR AUC of 0.9011 and a ROC AUC of 0.9211. The hybrid calibrated model has a PR AUC of 0.9748 and a ROC AUC of 0.9773.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Branch comparison. PR AUC and ROC AUC do not depend on a threshold. The hybrid row is the calibrated stacker without the rule layer.}
+\label{tab:ablation}
+\begin{tabular}{lrrrr}
+\toprule
+Branch & Full PR AUC & Full ROC AUC & Realistic PR AUC & Realistic ROC AUC \\
+\midrule
+Signals only & 0.6671 & 0.7003 & 0.4512 & 0.7043 \\
+Lexical LR & 0.9746 & 0.9771 & 0.9380 & 0.9784 \\
+Semantic only & 0.9011 & 0.9211 & 0.7676 & 0.9223 \\
+Hybrid calibrated & 0.9748 & 0.9773 & 0.9385 & 0.9786 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+This is the table I trust most because it shows what actually drives the result. On this corpus, the sparse lexical branch carries most of the ranking. The semantic branch is weaker on its own, likely because many SMS messages are short, noisy, and template-like. I kept it for three reasons: it gives the stacker a second view of the message, it helps calibration at the low false-positive point, and it supports the semantic match explanation in the user interface. The hybrid does not gain much PR AUC over the lexical branch. Its value is in the operating point, the review tier, and the rule layer for modern scam patterns.
+
+\subsection{Per-language results}
+
+Table \ref{tab:language} shows the realistic test results by language group. Hinglish, mixed script, Banglish, Bengali, and French are the strongest groups. English has the largest row count and an F1 of 0.8066 with a false-positive rate of 1.12 percent. Hindi and Spanish have lower recall, at 48.4 percent and 50.0 percent. The Hindi and Spanish test groups are small, with 231 and 150 rows. The threshold is global, so a group with a small spam count and a conservative score distribution can lose recall. Banglish has a 2.20 percent false-positive rate, above the overall rate. The group is small, and romanized Bengali phrases can overlap with scam wording. I would add Banglish hard negatives and consider per-language thresholds in a future version.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Realistic test results by language at the selected spam threshold.}
+\label{tab:language}
+\begin{tabularx}{\textwidth}{Xrrrrrrr}
+\toprule
+Language & Rows & Spam prior & Precision & Recall & F1 & FPR & PR AUC \\
+\midrule
+English & 8,609 & 19.2\% & 93.74\% & 70.79\% & 0.8066 & 1.12\% & 0.9203 \\
+Hinglish & 371 & 35.3\% & 99.21\% & 95.42\% & 0.9728 & 0.42\% & 0.9977 \\
+Bengali & 167 & 42.5\% & 100.00\% & 91.55\% & 0.9559 & 0.00\% & 0.9977 \\
+Banglish & 161 & 43.5\% & 97.06\% & 94.29\% & 0.9565 & 2.20\% & 0.9984 \\
+Hindi & 231 & 13.4\% & 100.00\% & 48.39\% & 0.6522 & 0.00\% & 0.9550 \\
+Spanish & 150 & 16.0\% & 100.00\% & 50.00\% & 0.6667 & 0.00\% & 0.9684 \\
+French & 357 & 12.0\% & 100.00\% & 86.05\% & 0.9250 & 0.00\% & 0.9940 \\
+Arabic & 67 & 16.4\% & 100.00\% & 72.73\% & 0.8421 & 0.00\% & 0.9842 \\
+Mixed & 113 & 31.9\% & 97.14\% & 94.44\% & 0.9577 & 1.30\% & 0.9970 \\
+Other or rare & 166 & 6.6\% & 100.00\% & 63.64\% & 0.7778 & 0.00\% & 0.9001 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Per-category results}
+
+Table \ref{tab:category} groups the test rows into scam and hard negative categories. Recall is shown for scam groups and false-positive rate for hard negative groups. The bank, KYC, UPI, and investment group has a recall of 98.1 percent. The lottery and promotional group has a recall of 92.0 percent. The peer-to-peer, crypto, marketplace, and romance group has a recall of 78.5 percent. The delivery and OTP group has a recall of 75.0 percent. The hardest normal group is the OTP, bank, and service group, with a false-positive rate of 1.88 percent. The personal and benign group has a false-positive rate of 0.90 percent.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Realistic test results by category. Recall is used for scam groups. FPR is used for hard negative groups.}
+\label{tab:category}
+\begin{tabularx}{\textwidth}{Xrrr}
+\toprule
+Group & Rows & Recall & FPR \\
+\midrule
+Hard negative, personal and benign & 7,138 & n/a & 0.90\% \\
+Hard negative, OTP, bank, and service & 958 & n/a & 1.88\% \\
+Hard negative, delivery, promo, marketplace, other & 218 & n/a & 0.00\% \\
+Scam, bank, KYC, UPI, investment & 106 & 98.11\% & n/a \\
+Scam, lottery and promotional & 475 & 92.00\% & n/a \\
+Scam, P2P, crypto, marketplace, romance & 79 & 78.48\% & n/a \\
+Scam, delivery and OTP & 40 & 75.00\% & n/a \\
+Scam, job & 24 & 87.50\% & n/a \\
+Scam, other & 1,350 & 65.26\% & n/a \\
+Scam, phishing & 4 & 50.00\% & n/a \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The category table shows where the system needs more work. The hard negative OTP and bank group is the main source of false positives. These messages often contain a bank name, a link, an amount, and a security warning. The rule layer does not escalate them because the domain is legitimate or the OTP context is local. More hard negatives of this kind would help the lexical model and the calibration. The phishing group is too small to support a strong conclusion, with only four rows in the realistic test set.
+
+\subsection{Adversarial evaluation}
+
+The adversarial suite has 150 cases. It covers peer-to-peer payment traps, crypto doubling, fake bKash and Nagad alerts, KYC phishing, delivery and OTP fraud, job scams, romance scams, marketplace deposit scams, loan and investment scams, tech-support scams, lottery and prize messages, seed phrase theft, mistaken transfer scams, and hard negatives such as normal lunch requests, bank debits, OTP warnings, delivery updates, meeting links, and office raffle messages. The cases are spread across English, Bengali, Banglish, Hindi, Hinglish, Spanish, French, Arabic, and mixed script text.
+
+Table \ref{tab:adversarial} compares the calibrated model with and without the rule layer. Without rules, the strict pass rate is 82.0 percent, the soft pass rate is 90.7 percent, and the block safe rate is 100 percent. The raw model misses 13 scams and places 14 scam cases in review. With rules, the strict pass rate rises to 97.33 percent, the soft pass rate to 99.33 percent, and the block safe rate stays at 100 percent. The number of missed scams drops to zero. The rule layer adds no false blocks.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Adversarial suite results with and without the high-confidence rule layer. The suite has 150 cases, 73 spam and 77 ham.}
+\label{tab:adversarial}
+\begin{tabular}{lrr}
+\toprule
+Metric & Model only & Model plus rules \\
+\midrule
+Strict pass rate & 82.00\% & 97.33\% \\
+Soft pass rate & 90.67\% & 99.33\% \\
+Block safe rate & 100.00\% & 100.00\% \\
+False blocks & 0 & 0 \\
+False reviews of normal messages & 1 & 1 \\
+Missed scams labelled NORMAL & 13 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The four remaining strict misses are all in the SUSPICIOUS tier. Three are romance or emergency money cases. One is a normal office raffle message that looks like a prize scam. The office raffle is a false review, not a false block. That is a reasonable outcome for a text-only model. A prize-style message with no link and no payment request can be genuinely normal. The review tier gives the user a chance to inspect it.
+
+The first adversarial pass, before the signal and rule work, reached 78.0 percent strict, 90.0 percent soft, and 100 percent block safe. The failures were concentrated in remote OTP theft, delivery fee phishing, fraud alert phishing, and multilingual peer-to-peer bait. Three changes moved the final pass. I expanded the signal lexicon with multilingual payment, delivery, fraud, and OTP patterns. I split the OTP rule into remote and local cases. I refit the stacker and thresholds after the signal changes. I did not retrain the lexical model for that pass. The failures were decision and pattern coverage problems, and the rule layer addressed them without adding false blocks.
+
+\subsection{Calibration and thresholds}
+
+The selected spam threshold is 0.706775. On the validation tuning split it gives a false-positive rate of 0.97 percent, a recall of 71.9 percent, and a precision of 94.9 percent. On the realistic test set it gives a false-positive rate of 0.99 percent and a recall of 74.0 percent. The review threshold is 0.31. On the validation tuning split the review band has a false-positive rate of 4.93 percent and a recall of 87.0 percent. The review band is a queue for human review, never an automatic block.
+
+Calibration is strong on the realistic test set, with an expected calibration error of 0.0039 and a Brier score of 0.0413. The full test set has a higher ECE of 0.0210 because its spam prior is 45.2 percent, while the stacker was fit on a 20 percent prior. That is an expected prior shift. I report both numbers because the lower one is not a trick; it matches the prior the stacker was trained on. The realistic test is the better estimate for a deployment where spam is a minority class.
+
+\subsection{Latency}
+
+Table \ref{tab:latency} shows the encoder latency. The PyTorch encoder takes 40.1 ms for batch one, 89.9 ms for batch eight, and 271.3 ms for batch 32. The FP32 ONNX encoder takes 11.8, 47.8, and 173.2 ms. The INT8 ONNX encoder takes 7.5, 32.2, and 130.0 ms. The INT8 encoder is about five times faster than PyTorch for a single message and about twice as fast for a batch of 32.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Encoder latency on the test CPU. Times are milliseconds per batch.}
+\label{tab:latency}
+\begin{tabular}{lrrr}
+\toprule
+Backend & Batch 1 & Batch 8 & Batch 32 \\
+\midrule
+PyTorch MiniLM & 40.1 & 89.9 & 271.3 \\
+ONNX FP32 & 11.8 & 47.8 & 173.2 \\
+ONNX INT8 & 7.5 & 32.2 & 130.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The full single message API call is slower than the encoder alone because it also runs the signal analysis, the sparse lexical model, the stacker, the rule checks, and the explanation. After warmup, the second call took 15.4 ms and the first warm call took 21.2 ms. A batch of three messages had a mean latency of 26.1 ms per message. The browser interface reported 33.5 ms for one request, which includes the HTTP round trip and rendering. These numbers support the claim that the model runs in about 15 ms on a CPU, while being clear that the full web request is a little slower.
+
+\subsection{Error analysis}
+
+The main error sources are language coverage, hard negative bank and OTP messages, and ambiguous romance or prize messages. Hindi and Spanish recall are the weakest language results. The Hindi test group has only 31 spam rows, and the Spanish test group has only 24 spam rows. A global threshold tuned for one percent false positives is conservative on these small groups. More data and per-language calibration would help.
+
+The OTP and bank hard negative group has a false-positive rate of 1.88 percent, higher than the overall rate. These messages often contain the same words as phishing messages, such as ``account'', ``verify'', ``bank'', and a link. The difference is the legitimate domain and the absence of a payment request. The domain check and the local OTP exception help, but the lexical model still makes some mistakes.
+
+The romance cases land in review. Part of that is a data problem. A genuine message from a partner who needs money for a hospital bill can look like a romance scam. A text-only model cannot know the relationship. The review tier is the right place for those cases. The office raffle is a false review because the prize language looks like spam. It was not blocked, and the user can ignore it.
+
+The dataset also has label noise. Public SMS corpora come from different sources, and some labels are weak. The pipeline drops contradictory duplicate clusters and filters obvious noisy source rows, but it cannot remove all noise. The synthetic data adds coverage and can also bias the model toward template-style. I would not read the test numbers as field performance.
+
+\section{Discussion}
+
+\subsection{What worked}
+
+The strongest part of the system is the combination of sparse lexical features and hard negatives. Character n-grams handle transliteration, spacing, and obfuscation without a dictionary. The 100 signals make the model aware of URLs, payment requests, OTP language, urgency, and script mixing. The stacker turns the branch scores into calibrated probabilities. The low false-positive threshold makes the detector usable as a first pass filter. The review tier keeps uncertain messages out of the block path. The INT8 ONNX encoder makes the multilingual branch practical on a CPU.
+
+The rule layer is also useful. It is small, readable, and easy to audit. It catches clear patterns that the calibrated model ranks below the threshold. It cannot lower a label, so it cannot turn a spam message into a normal message. It cannot silently block a normal message without the rule evidence appearing in the response. I prefer this design to a large unconstrained rule set because I can explain every escalation.
+
+\subsection{Limitations}
+
+Language coverage is uneven. English dominates the corpus. Hindi and Spanish recall are lower than the other groups. The language detector is rule-based and may confuse short Latin-script messages. A larger balanced corpus and a learned language identifier would help.
+
+The semantic encoder is frozen. I kept it that way to make training and inference practical on a CPU. A full multilingual DeBERTa fine-tune could improve paraphrase handling. The optional Keras trainer implements the two-stage schedule, but the public multilingual KerasHub presets in this environment were missing tokenizer assets. The production system uses the Hugging Face MiniLM encoder. I would rather state that plainly than hide it.
+
+The corpus mixes public data with synthetic templates. The synthetic data provides modern scam families that public SMS corpora lack, but it can make the task easier than real traffic. The per-language and per-category results show that the model still makes mistakes on real hard negatives. More real multilingual data, more human-reviewed hard negatives, and active learning would improve the system.
+
+Rules go stale. They are precise now, and scammers change wording. A rule that is helpful today can become useless in a few months. I would review the rules with the adversarial suite on a regular schedule and retrain when new scam families appear.
+
+The test set is not a field test. It is built from the same public sources as the training set, after deduplication. The adversarial suite is manually written and is small compared with real traffic. The results are strong on these tests, but they are not a guarantee of field performance. A live deployment should monitor false positives, collect user feedback, and keep a human review path.
+
+\subsection{Ethical use and deployment}
+
+I intend this system for defensive filtering. It should not be used to surveil people or to block legitimate communication without review. The web interface does not store messages, and the API returns only a prediction. A production deployment should add authentication, rate limits, logging rules, and a privacy policy. The model should be presented as a warning tool, not as a legal or financial authority. A user should always verify a payment request, an OTP request, or a bank alert through an official channel.
+
+The system fits a small deployment. The web front end is static HTML, CSS, and JavaScript. The API is a standard FastAPI application. The model runs on a CPU and uses an INT8 ONNX encoder. A static-only hosting platform cannot run the Python model, so the API needs a Python runtime, a container, or a small virtual private server. The static front end can be hosted separately if the API is behind a public URL.
+
+\section*{Code and demo}
+
+\noindent
+\href{https://github.com/GodfatherTHR/spamradar}{\includegraphics[height=12pt]{logos/github_logo.png}}~\textbf{GitHub repository:}~\url{https://github.com/GodfatherTHR/spamradar}\\[0.4em]
+\href{https://toriqulhaque-spamradar.static.hf.space/index.html}{\includegraphics[height=12pt]{logos/hf_logo.png}}~\textbf{Live demo:}~\url{https://toriqulhaque-spamradar.static.hf.space/index.html}
+
+The repository includes the data pipeline, detector, API, tests, deployment files, lexical model, calibration artifacts, browser demo, and this paper. The 118 MB INT8 encoder is not committed because it exceeds GitHub's per-file limit; it can be regenerated with \texttt{python -m src.export\_onnx} or downloaded from the demo Space.
+
+\section{Conclusion}
+
+I started with 40 messages and a model that could not read Bengali. The final system uses a leakage-safe multilingual corpus, a hybrid lexical and semantic model, a calibrated stacker, precision-constrained thresholds, and a small rule escalation layer. On a realistic 20 percent prior test set it reaches a PR AUC of 0.9385, an F1 of 0.8315, a precision of 94.9 percent, a recall of 74.0 percent, and a false-positive rate of 0.99 percent. On a 150-case adversarial suite it reaches a 97.33 percent strict pass rate, a 99.33 percent soft pass rate, and a 100 percent block safe rate, with no false blocks and no missed scams. The INT8 ONNX encoder runs in 7.5 ms for one message, and a warmed single message API call takes about 15 ms on a four-core CPU.
+
+The engineering details did most of the work. Near-duplicate removal and group-aware splitting make the evaluation believable. Hard negatives reduce false positives on normal bank, OTP, delivery, and personal messages. A review tier keeps uncertain messages out of the block path. Caching the feature names cut the explanation path from hundreds of milliseconds to a few milliseconds. The remaining work is more real multilingual data, better Hindi and Spanish recall, fewer false positives on legitimate bank and OTP messages, and a fully fine-tuned multilingual transformer on a GPU.
+
+\begin{thebibliography}{99}
+
+\bibitem{sahami1998}
+M. Sahami, S. Dumais, D. Heckerman, and E. Horvitz.
+A Bayesian approach to filtering junk email.
+In \textit{AAAI Workshop on Learning for Text Categorization}, 1998.
+
+\bibitem{almeida2011}
+T. A. Almeida, J. M. G. Hidalgo, and A. Yamakami.
+Contributions to the study of SMS spam filtering: New collection and results.
+In \textit{Proceedings of the 11th ACM Symposium on Document Engineering}, 2011.
+
+\bibitem{khonji2013}
+M. Khonji, Y. Iraqi, and A. Jones.
+Phishing detection: A literature survey.
+\textit{IEEE Communications Surveys and Tutorials}, 15(4), 2013.
+
+\bibitem{salahdine2019}
+F. Salahdine and N. Kaabouch.
+Social engineering attacks: A survey.
+\textit{Future Internet}, 11(4), 2019.
+
+\bibitem{mishra2020}
+S. Mishra and D. Soni.
+Smishing detector: A security model to detect smishing through SMS text classification.
+\textit{Journal of Information Security and Applications}, 2020.
+
+\bibitem{devlin2019}
+J. Devlin, M. W. Chang, K. Lee, and K. Toutanova.
+BERT: Pre-training of deep bidirectional transformers for language understanding.
+In \textit{Proceedings of NAACL}, 2019.
+
+\bibitem{conneau2020}
+A. Conneau, K. Khandelwal, N. Goyal, V. Chaudhary, G. Wenzek, F. Guzman, E. Grave, M. Ott, L. Zettlemoyer, and V. Stoyanov.
+Unsupervised cross-lingual representation learning at scale.
+In \textit{Proceedings of ACL}, 2020.
+
+\bibitem{he2023}
+P. He, J. Gao, and W. Chen.
+DeBERTaV3: Improving DeBERTa using ELECTRA-style pre-training with gradient-disentangled embedding sharing.
+In \textit{Proceedings of ICLR}, 2023.
+
+\bibitem{wang2020}
+W. Wang, F. Wei, L. Dong, H. Bao, N. Yang, and M. Zhou.
+MiniLM: Deep self-attention distillation for task-agnostic compression of pre-trained transformers.
+In \textit{Proceedings of NeurIPS}, 2020.
+
+\bibitem{reimers2019}
+N. Reimers and I. Gurevych.
+Sentence-BERT: Sentence embeddings using Siamese BERT networks.
+In \textit{Proceedings of EMNLP}, 2019.
+
+\bibitem{wolf2020}
+T. Wolf, L. Debut, V. Sanh, J. Chaumond, C. Delangue, A. Moi, P. Cistac, T. Rault, R. Louf, M. Funtowicz, and J. Brew.
+Transformers: State-of-the-art natural language processing.
+In \textit{Proceedings of EMNLP System Demonstrations}, 2020.
+
+\bibitem{he2009}
+H. He and E. A. Garcia.
+Learning from imbalanced data.
+\textit{IEEE Transactions on Knowledge and Data Engineering}, 21(9), 2009.
+
+\bibitem{saito2015}
+T. Saito and M. Rehmsmeier.
+The precision-recall plot is more informative than the ROC plot when evaluating binary classifiers on imbalanced datasets.
+\textit{PLoS ONE}, 10(3), 2015.
+
+\bibitem{guo2017}
+C. Guo, G. Pleiss, Y. Sun, and K. Q. Weinberger.
+On calibration of modern neural networks.
+In \textit{Proceedings of ICML}, 2017.
+
+\bibitem{lin2017}
+T. Y. Lin, P. Goyal, R. Girshick, K. He, and P. Dollar.
+Focal loss for dense object detection.
+In \textit{Proceedings of ICCV}, 2017.
+
+\bibitem{charikar2002}
+M. S. Charikar.
+Similarity estimation techniques from rounding algorithms.
+In \textit{Proceedings of STOC}, 2002.
+
+\bibitem{pedregosa2011}
+F. Pedregosa, G. Varoquaux, A. Gramfort, V. Michel, B. Thirion, O. Grisel, M. Blondel, P. Prettenhofer, R. Weiss, V. Dubourg, J. Vanderplas, A. Passos, D. Cournapeau, M. Brucher, M. Perrot, and E. Duchesnay.
+Scikit-learn: Machine learning in Python.
+\textit{Journal of Machine Learning Research}, 12, 2011.
+
+\bibitem{sitaram2019}
+S. Sitaram, K. R. Chandu, S. K. Rallabandi, and A. W. Black.
+A survey of code-switched speech and language processing.
+\textit{arXiv preprint arXiv:1904.00784}, 2019.
+
+\bibitem{loshchilov2019}
+I. Loshchilov and F. Hutter.
+Decoupled weight decay regularization.
+In \textit{Proceedings of ICLR}, 2019.
+
+\bibitem{loshchilov2017}
+I. Loshchilov and F. Hutter.
+SGDR: Stochastic gradient descent with warm restarts.
+In \textit{Proceedings of ICLR}, 2017.
+
+\bibitem{onnxruntime}
+ONNX Runtime developers.
+ONNX Runtime: Cross-platform, high-performance machine learning inferencing.
+\url{https://onnxruntime.ai}, accessed November 2026.
+
+\bibitem{fastapi}
+S. Ramirez.
+FastAPI documentation.
+\url{https://fastapi.tiangolo.com}, accessed November 2026.
+
+\bibitem{uddin2024}
+M. A. Uddin, M. N. Islam, L. Maglaras, H. Janicke, and I. H. Sarker.
+ExplainableDetector: Exploring transformer-based language modeling approach for SMS spam detection with explainability analysis.
+\textit{arXiv preprint arXiv:2405.08026}, 2024.
+
+\bibitem{oyeyemi2024}
+D. A. Oyeyemi and A. K. Ojo.
+SMS spam detection and classification to combat abuse in telephone networks using natural language processing.
+\textit{arXiv preprint arXiv:2406.06578}, 2024.
+
+\bibitem{maheshwari2024}
+S. Maheshwari, S. Aggarwal, and R. Kaushal.
+A novel SMS spam dataset and bi-directional transformer-based short-text representations for SMS spam detection.
+\textit{International Journal of Information and Decision Sciences}, 16(4), 2024.
+
+\bibitem{koide2024}
+T. Koide, N. Fukushi, H. Nakano, and D. Chiba.
+ChatSpamDetector: Leveraging large language models for effective phishing email detection.
+In \textit{SecureComm}, 2024.
+
+\bibitem{shirvani2025}
+G. Shirvani and S. Ghasemshirazi.
+Advancing email spam detection: Leveraging zero-shot learning and large language models.
+\textit{arXiv preprint arXiv:2505.02362}, 2025.
+
+\bibitem{goel2024}
+D. Goel, H. Ahmad, A. K. Jain, and N. K. Goel.
+Machine learning driven smishing detection framework for mobile security.
+\textit{arXiv preprint arXiv:2412.09641}, 2024.
+
+\bibitem{goel2025}
+D. Goel.
+Detection and prevention of smishing attacks.
+\textit{arXiv preprint arXiv:2501.00260}, 2025.
+
+\bibitem{remmide2025}
+M. A. Remmide, F. Boumahdi, B. Ilhem, and N. Boustia.
+A privacy-preserving approach for detecting smishing attacks using federated deep learning.
+\textit{International Journal of Information Technology}, 17, pages 547--553, 2025.
+
+\bibitem{hosseinpour2025}
+S. Hosseinpour and S. Das.
+POSTER: A multi-signal model for detecting evasive smishing.
+\textit{arXiv preprint arXiv:2505.18233}, 2025.
+
+\bibitem{salman2026}
+M. Salman, M. Islam, M. Ikram, and M. A. Kaafar.
+Johnny still receives spam SMS: Assessing the robustness of SMS spam detection.
+\textit{arXiv preprint arXiv:2609.01171}, 2026.
+
+\bibitem{sachan2025}
+R. K. Sachan, V. Tiwari, N. Raghav, and P. Rajpoot.
+Spam text messages detection using multilingual embedding.
+\textit{Procedia Computer Science}, 260, pages 390--398, 2025.
+
+\bibitem{amaral2026}
+O. Amaral Cejas, Y. Guo, and Q. Tang.
+Large-scale multilingual SMS fraud detection for telecom networks.
+In \textit{Proceedings of the Second International Conference on Natural Language Processing and Artificial Intelligence for Cyber Security}, pages 64--73, 2026.
+
+\bibitem{filali2026}
+A. Filali, M. Shorfuzzaman, E. Abdellaoui Alaoui, M. Merras, M. Es-Sabry, A. Berrajaa, R. Alroobaea, and A. Yousef.
+Cross-lingual SMS spam detection using GAN-based augmentation for imbalanced datasets.
+\textit{Scientific Reports}, 16, article 7128, 2026.
+
+\bibitem{rauf2026}
+H. Rauf, U. Khan, J. A. Bashatah, and A. Zaib.
+Efficient multilingual spam detection on resource-constrained devices: A comparative analysis of QLoRA fine-tuning of Gemma 3, Qwen 3, and Llama 3.2 models.
+\textit{Complex and Intelligent Systems}, 12, article 119, 2026.
+
+\bibitem{yadav2024}
+A. Yadav, T. Garg, M. Klemen, M. Ulcar, B. Agarwal, and M. Robnik Sikonja.
+Code-mixed sentiment and hate-speech prediction.
+\textit{arXiv preprint arXiv:2405.12929}, 2024.
+
+\bibitem{geng2024}
+J. Geng, F. Cai, Y. Wang, H. Koeppl, P. Nakov, and I. Gurevych.
+A survey of confidence estimation and calibration in large language models.
+In \textit{Proceedings of NAACL}, 2024.
+
+\bibitem{ghourabi2023}
+A. Ghourabi and M. Alohaly.
+Enhancing spam message classification and detection using transformer-based embedding and ensemble learning.
+\textit{Sensors}, 23(8), 3861, 2023.
+
+\end{thebibliography}
+
+\end{document}

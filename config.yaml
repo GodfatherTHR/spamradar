@@ -1,0 +1,121 @@
+project:
+  name: multilingual_spam_detector
+  version: 1.0.0
+  seed: 42
+
+paths:
+  raw_dir: data/raw
+  processed_dir: data/processed
+  artifacts_dir: artifacts
+  web_dir: web
+
+data:
+  train_ratio: 0.8
+  val_ratio: 0.1
+  test_ratio: 0.1
+  min_text_chars: 3
+  max_text_chars: 1200
+  min_tokens: 1
+  realistic_spam_prior: 0.20
+  balance_languages: true
+  language_weight_power: 0.35
+  language_weight_cap: 4.0
+
+  source_caps:
+    scamshield: 72000
+    merged: 48000
+    multilang: 42000
+    p2p: 8304
+    uci: 5572
+    hindi: 15000
+    bengali: 7005
+    arabic: 630
+    spanish: 300
+    french: 2000
+    urgency: 1000
+
+  synthetic:
+    enabled: true
+    per_language_scam: 620
+    per_language_ham: 620
+    mixed_scam: 500
+    mixed_ham: 350
+    obfuscation_rate: 0.32
+    zero_width_rate: 0.06
+    leet_rate: 0.08
+    languages:
+      - English
+      - Bengali
+      - Banglish
+      - Hindi
+      - Hinglish
+      - Spanish
+      - French
+      - Arabic
+
+  dedupe:
+    simhash_bits: 64
+    hamming_threshold: 3
+    bands: 4
+
+  quality:
+    drop_ambiguous_negative_phishing: true
+    ambiguous_negative_threshold: 0.78
+    drop_legitimate_domain_spam: true
+    legitimate_domain_spam_threshold: 0.18
+
+model:
+  lexical:
+    char_ngram_range: [2, 5]
+    char_max_features: 180000
+    word_ngram_range: [1, 2]
+    word_max_features: 110000
+    min_df: 2
+    max_df: 0.995
+    sublinear_tf: true
+    C_grid: [1.0, 2.0, 4.0, 8.0, 16.0]
+    svm_C: 1.0
+    class_weight: balanced
+    max_iter: 400
+
+  semantic:
+    enabled: true
+    backbone: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+    batch_size: 64
+    max_seq_length: 64
+    max_train_samples: 56000
+    max_val_samples: 12000
+    max_test_samples: 12000
+    C_grid: [0.5, 1.0, 2.0, 4.0]
+    class_weight: balanced
+    onnx_int8: true
+
+  calibration:
+    fpr_target: 0.01
+    suspicious_fpr_target: 0.05
+    calibrator_cv: 3
+
+  ensemble:
+    min_semantic_weight: 0.15
+    max_semantic_weight: 0.45
+
+thresholds:
+  default_spam: 0.62
+  default_suspicious: 0.30
+
+api:
+  host: 127.0.0.1
+  port: 8000
+  max_batch_size: 256
+  max_text_length: 4000
+
+ui:
+  title: SpamRadar Multilingual
+  subtitle: Master-class spam & social-engineering detection
+  examples:
+    - "Give me $5 bucks I will give you an RTX 3090"
+    - "URGENT: Your bKash account is suspended. Click http://bkash-verify.xyz to reactivate."
+    - "আপনি ৫,০০,০০০ টাকা জিতেছেন! পুরস্কার পেতে আপনার বিকাশ নম্বর পাঠান।"
+    - "Aapka KYC pending hai, turant is link par click karke update karein: bit[.]ly/kyc-update"
+    - "Bro can you send me $5 for lunch? I'll pay you back tomorrow."
+    - "Your OTP is 482913. Do not share it with anyone."

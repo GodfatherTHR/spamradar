@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this code or the paper, cite the work below."
+title: "Catching Multilingual Spam on a CPU: A Hybrid Detector with Review Tiers"
+authors:
+  - family-names: Haque
+    given-names: Md. Toriqul
+    email: toriqulhaque27@gmail.com
+    affiliation: University of Scholars
+year: 2026
+url: "https://github.com/GodfatherTHR/spamradar"
+repository-code: "https://github.com/GodfatherTHR/spamradar"
+license: null
+keywords:
+  - multilingual spam detection
+  - smishing
+  - social engineering
+  - code mixed text
+  - calibration
+  - ONNX
+  - CPU inference

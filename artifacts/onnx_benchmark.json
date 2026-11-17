@@ -1,0 +1,27 @@
+{
+  "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "max_seq_length": 64,
+  "fp32_path": "E:\\downloads\\deberta_v3-keras-deberta_v3_extra_small_en-v3\\multilingual_spam_detector\\artifacts\\semantic_encoder.onnx",
+  "int8_path": "E:\\downloads\\deberta_v3-keras-deberta_v3_extra_small_en-v3\\multilingual_spam_detector\\artifacts\\semantic_encoder_int8.onnx",
+  "cosine_similarity_fp32": 1.0,
+  "cosine_similarity_int8": 0.987043,
+  "cosine_vs_sentence_transformers_fp32": 1.0,
+  "cosine_vs_sentence_transformers_int8": 0.987043,
+  "latency_ms": {
+    "pytorch": {
+      "batch_1": 40.086,
+      "batch_8": 89.912,
+      "batch_32": 271.278
+    },
+    "onnx_fp32": {
+      "batch_1": 11.792,
+      "batch_8": 47.763,
+      "batch_32": 173.234
+    },
+    "onnx_int8": {
+      "batch_1": 7.546,
+      "batch_8": 32.163,
+      "batch_32": 129.996
+    }
+  }
+}

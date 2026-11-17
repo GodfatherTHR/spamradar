@@ -1,0 +1,160 @@
+{
+  "project": "multilingual_spam_detector",
+  "version": "1.0.0",
+  "created_at": "2026-11-16T22:02:57.686725+00:00",
+  "seed": 42,
+  "model_type": "hybrid_tfidf_signals_plus_multilingual_minilm",
+  "backbone": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "lexical": {
+    "best_C": 8.0,
+    "svm_C": 1.0,
+    "feature_count": 290100,
+    "train_rows": 120659,
+    "grid_results": [
+      {
+        "C": 1.0,
+        "pr_auc": 0.95612,
+        "f1": 0.88467
+      },
+      {
+        "C": 2.0,
+        "pr_auc": 0.95944,
+        "f1": 0.88902
+      },
+      {
+        "C": 4.0,
+        "pr_auc": 0.96114,
+        "f1": 0.89104
+      },
+      {
+        "C": 8.0,
+        "pr_auc": 0.96155,
+        "f1": 0.89113
+      },
+      {
+        "C": 16.0,
+        "pr_auc": 0.9613,
+        "f1": 0.89154
+      }
+    ],
+    "val_metrics": {
+      "logistic": {
+        "pr_auc": 0.97228,
+        "f1_at_0_5": 0.90618
+      },
+      "svm": {
+        "pr_auc": 0.96159,
+        "f1_at_0": 0.89353
+      }
+    }
+  },
+  "semantic": {
+    "model_name": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "embedding_dim": 384,
+    "train_sample_rows": 32000,
+    "val_rows": 15045,
+    "best_C": 0.5,
+    "grid_results": [
+      {
+        "C": 0.5,
+        "pr_auc": 0.90261,
+        "f1": 0.83173
+      },
+      {
+        "C": 1.0,
+        "pr_auc": 0.90254,
+        "f1": 0.83175
+      },
+      {
+        "C": 2.0,
+        "pr_auc": 0.90247,
+        "f1": 0.83149
+      },
+      {
+        "C": 4.0,
+        "pr_auc": 0.90245,
+        "f1": 0.83138
+      }
+    ],
+    "val_metrics": {
+      "C": 0.5,
+      "pr_auc": 0.90261,
+      "f1": 0.83173
+    }
+  },
+  "calibrator": {
+    "feature_names": [
+      "lexical_lr_logit",
+      "lexical_svm_score",
+      "semantic_logit",
+      "heuristic_score"
+    ],
+    "train_rows": 5177,
+    "train_prior": 0.19992273517481166
+  },
+  "thresholds": {
+    "spam_threshold": 0.706775,
+    "suspicious_threshold": 0.31,
+    "fpr_target": 0.01,
+    "suspicious_fpr_target": 0.05,
+    "tuned_on": "val_tune",
+    "val_tune_metrics": {
+      "threshold": 0.706775,
+      "precision": 0.949045,
+      "recall": 0.719112,
+      "f1": 0.818232,
+      "fpr": 0.009657,
+      "fnr": 0.280888,
+      "tp": 745,
+      "fp": 40,
+      "tn": 4102,
+      "fn": 291,
+      "predicted_spam": 785
+    },
+    "suspicious_metrics": {
+      "threshold": 0.31,
+      "precision": 0.815385,
+      "recall": 0.869691,
+      "f1": 0.841663,
+      "fpr": 0.049252,
+      "fnr": 0.130309,
+      "tp": 901,
+      "fp": 204,
+      "tn": 3938,
+      "fn": 135,
+      "predicted_spam": 1105
+    },
+    "risk_tiers": {
+      "NORMAL": "< 0.3100",
+      "SUSPICIOUS": "[0.3100, 0.7068)",
+      "SPAM": ">= 0.7068"
+    }
+  },
+  "val_tune_metrics": {
+    "threshold": 0.712285,
+    "precision": 0.948718,
+    "recall": 0.714286,
+    "f1": 0.814978,
+    "fpr": 0.009657,
+    "fnr": 0.285714,
+    "tp": 740,
+    "fp": 40,
+    "tn": 4102,
+    "fn": 296,
+    "predicted_spam": 780
+  },
+  "data": {
+    "train_rows": 120659,
+    "val_rows": 15045,
+    "val_cal_rows": 5177,
+    "val_tune_rows": 5178,
+    "test_rows": 15162,
+    "test_realistic_rows": 10392
+  },
+  "notes": [
+    "The production CPU model uses a frozen multilingual MiniLM encoder plus a calibrated linear head, not the legacy English-only DeBERTa-v3-extra-small H5 model.",
+    "Thresholds were tuned on a 20% prior validation split disjoint from the calibration split.",
+    "The full two-stage Keras multilingual DeBERTa fine-tuning path is available in src/keras_transformer.py for GPU environments."
+  ],
+  "recalibrated_at": "2026-11-16T22:20:07.648099+00:00"
+}

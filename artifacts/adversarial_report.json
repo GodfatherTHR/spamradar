@@ -1,0 +1,3057 @@
+{
+  "total": 150,
+  "hard_pass": 146,
+  "hard_pass_rate": 0.9733,
+  "soft_pass": 149,
+  "soft_pass_rate": 0.9933,
+  "block_safe": 150,
+  "block_safe_rate": 1.0,
+  "false_blocks": 0,
+  "false_reviews": 1,
+  "missed_scams": 0,
+  "decision_layer": "calibrated model + high-confidence rule escalation",
+  "raw_thresholds": {
+    "spam": 0.706775,
+    "suspicious": 0.31
+  },
+  "by_language": {
+    "English": {
+      "total": 86,
+      "hard_pass": 83,
+      "block_safe": 86,
+      "hard_pass_rate": 0.9651,
+      "block_safe_rate": 1.0
+    },
+    "mixed": {
+      "total": 8,
+      "hard_pass": 8,
+      "block_safe": 8,
+      "hard_pass_rate": 1.0,
+      "block_safe_rate": 1.0
+    },
+    "Bengali": {
+      "total": 12,
+      "hard_pass": 11,
+      "block_safe": 12,
+      "hard_pass_rate": 0.9167,
+      "block_safe_rate": 1.0
+    },
+    "Banglish": {
+      "total": 8,
+      "hard_pass": 8,
+      "block_safe": 8,
+      "hard_pass_rate": 1.0,
+      "block_safe_rate": 1.0
+    },
+    "Hindi": {
+      "total": 8,
+      "hard_pass": 8,
+      "block_safe": 8,
+      "hard_pass_rate": 1.0,
+      "block_safe_rate": 1.0
+    },
+    "Hinglish": {
+      "total": 7,
+      "hard_pass": 7,
+      "block_safe": 7,
+      "hard_pass_rate": 1.0,
+      "block_safe_rate": 1.0
+    },
+    "Spanish": {
+      "total": 7,
+      "hard_pass": 7,
+      "block_safe": 7,
+      "hard_pass_rate": 1.0,
+      "block_safe_rate": 1.0
+    },
+    "French": {
+      "total": 7,
+      "hard_pass": 7,
+      "block_safe": 7,
+      "hard_pass_rate": 1.0,
+      "block_safe_rate": 1.0
+    },
+    "Arabic": {
+      "total": 7,
+      "hard_pass": 7,
+      "block_safe": 7,
+      "hard_pass_rate": 1.0,
+      "block_safe_rate": 1.0
+    }
+  },
+  "failures": [
+    {
+      "id": "en_romance_doctor",
+      "text": "I feel a deep connection with you. Can you help me with $800 for my mother's hospital bill? I will repay you when I arrive.",
+      "language": "English",
+      "category": "romance",
+      "expected": "SPAM",
+      "predicted": "SUSPICIOUS",
+      "spam_probability": 0.357948,
+      "hard_pass": false,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Romance scam with a hospital emergency.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Romance or emergency-money pattern"
+      ]
+    },
+    {
+      "id": "en_romance_ticket",
+      "text": "I bought a ticket to visit you, but customs is asking for a $250 clearance fee. Please pay it so I can finally see you.",
+      "language": "English",
+      "category": "romance",
+      "expected": "SPAM",
+      "predicted": "SUSPICIOUS",
+      "spam_probability": 0.374866,
+      "hard_pass": false,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Romance scam with a ticket and customs-fee story.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Delivery fee or customs-fee request",
+        "Romance or emergency-money pattern"
+      ]
+    },
+    {
+      "id": "bn_romance",
+      "text": "প্রিয়, আমি বিদেশে সেনাবাহিনীতে আছি। তোমার সাথে দেখা করতে ২০,০০০ টাকা দরকার। বিকাশে পাঠাও।",
+      "language": "Bengali",
+      "category": "romance",
+      "expected": "SPAM",
+      "predicted": "SUSPICIOUS",
+      "spam_probability": 0.482155,
+      "hard_pass": false,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Bengali romance scam with a visa emergency.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_office_gift",
+      "text": "You won the office raffle! Come pick up your gift card from reception whenever you are free.",
+      "language": "English",
+      "category": "hard_negative_prize",
+      "expected": "NORMAL",
+      "predicted": "SUSPICIOUS",
+      "spam_probability": 0.650785,
+      "hard_pass": false,
+      "block_safe": true,
+      "soft_pass": false,
+      "why": "Legitimate office raffle prize with no fee or link.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Prize, lottery, or reward bait",
+        "Semantically close to a known scam script"
+      ]
+    }
+  ],
+  "all_cases": [
+    {
+      "id": "en_p2p_rtx",
+      "text": "Give me $5 bucks I will give you an RTX 3090. Only one left, bro.",
+      "language": "English",
+      "category": "p2p_bait",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.689144,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "The canonical unrealistic exchange: a tiny payment for a high-value GPU.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "unrealistic exchange or money-doubling pattern"
+      ],
+      "signals": [
+        "High-confidence rule: unrealistic exchange or money-doubling pattern",
+        "Unrealistic exchange or money-doubling offer",
+        "Semantically close to a known scam script",
+        "Prize, lottery, or reward bait"
+      ]
+    },
+    {
+      "id": "en_p2p_double_cash",
+      "text": "Send me $20 today and I will send you $200 back tonight. Guaranteed.",
+      "language": "English",
+      "category": "p2p_bait",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.366365,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Direct money-doubling bait with a small stake.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "unrealistic exchange or money-doubling pattern"
+      ],
+      "signals": [
+        "High-confidence rule: unrealistic exchange or money-doubling pattern",
+        "Unrealistic exchange or money-doubling offer",
+        "Crypto doubling, giveaway, or investment bait",
+        "Loan or guaranteed-return investment bait"
+      ]
+    },
+    {
+      "id": "en_p2p_wrong_transfer",
+      "text": "I accidentally sent you $500 by mistake. Send me $50 back and keep the rest as a thank-you.",
+      "language": "English",
+      "category": "p2p_bait",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.898757,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Fake mistaken-transfer scam asking the victim to return money.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "unrealistic exchange or money-doubling pattern",
+        "fake mistaken-transfer request"
+      ],
+      "signals": [
+        "High-confidence rule: unrealistic exchange or money-doubling pattern",
+        "Unrealistic exchange or money-doubling offer",
+        "Semantically close to a known scam script",
+        "Direct request to send money or pay a fee"
+      ]
+    },
+    {
+      "id": "en_market_ps5_zelle",
+      "text": "Selling a sealed PS5 for $150. Zelle only. Pay the deposit first and I will ship it today.",
+      "language": "English",
+      "category": "marketplace_scam",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.645437,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Deposit-first marketplace scam using a payment app.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "marketplace deposit/shipping trap"
+      ],
+      "signals": [
+        "High-confidence rule: marketplace deposit/shipping trap",
+        "Marketplace deposit or shipping trap",
+        "Prize, lottery, or reward bait"
+      ]
+    },
+    {
+      "id": "en_market_deployed_deposit",
+      "text": "I am deployed overseas, so I cannot meet. Send a $75 deposit via Cash App and I will ship the iPhone 16 Pro.",
+      "language": "English",
+      "category": "marketplace_scam",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.94937,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Fake overseas seller asks for a deposit before shipping.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "unrealistic exchange or money-doubling pattern",
+        "marketplace deposit/shipping trap"
+      ],
+      "signals": [
+        "High-confidence rule: unrealistic exchange or money-doubling pattern",
+        "Unrealistic exchange or money-doubling offer",
+        "Marketplace deposit or shipping trap",
+        "Prize, lottery, or reward bait"
+      ]
+    },
+    {
+      "id": "en_market_tickets_zelle",
+      "text": "Two concert tickets available. Zelle only. Pay $100 deposit now and I will transfer the tickets immediately.",
+      "language": "English",
+      "category": "marketplace_scam",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.90329,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Concert-ticket deposit scam with a payment-app-only constraint.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "marketplace deposit/shipping trap"
+      ],
+      "signals": [
+        "High-confidence rule: marketplace deposit/shipping trap",
+        "Marketplace deposit or shipping trap",
+        "Urgency or deadline pressure"
+      ]
+    },
+    {
+      "id": "en_crypto_btc_double",
+      "text": "Send 0.1 BTC to this wallet and receive 0.5 BTC back in 10 minutes. Guaranteed 500% profit.",
+      "language": "English",
+      "category": "crypto",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.999586,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Classic crypto doubling promise.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "unrealistic exchange or money-doubling pattern"
+      ],
+      "signals": [
+        "High-confidence rule: unrealistic exchange or money-doubling pattern",
+        "Unrealistic exchange or money-doubling offer",
+        "Crypto doubling, giveaway, or investment bait",
+        "Loan or guaranteed-return investment bait"
+      ]
+    },
+    {
+      "id": "en_crypto_airdrop",
+      "text": "You are eligible for a 1,000 USDT airdrop. Connect and verify your wallet at hxxps://claim-usdt.top before it expires.",
+      "language": "English",
+      "category": "crypto",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.996918,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Fake airdrop that asks the user to connect or verify a wallet.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "crypto doubling or wallet-recovery bait",
+        "refund/claim with a suspicious link and urgency"
+      ],
+      "signals": [
+        "High-confidence rule: crypto doubling or wallet-recovery bait",
+        "Crypto doubling, giveaway, or investment bait",
+        "Suspicious or obfuscated link",
+        "Disguised link or spaced-out text"
+      ]
+    },
+    {
+      "id": "en_crypto_seed",
+      "text": "To restore your wallet, reply with your 12-word seed phrase and we will fix the sync issue for you.",
+      "language": "English",
+      "category": "crypto",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.920088,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Seed-phrase theft: a real security rule violation.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "unrealistic exchange or money-doubling pattern",
+        "seed-phrase request"
+      ],
+      "signals": [
+        "High-confidence rule: unrealistic exchange or money-doubling pattern",
+        "Unrealistic exchange or money-doubling offer"
+      ]
+    },
+    {
+      "id": "en_crypto_forex",
+      "text": "Our AI forex bot earns 300% monthly with zero risk. Minimum deposit $100. Join the VIP Telegram group now.",
+      "language": "English",
+      "category": "loan_investment",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.937778,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Guaranteed-return investment bait with a Telegram funnel.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "marketplace deposit/shipping trap",
+        "job offer with an upfront fee"
+      ],
+      "signals": [
+        "High-confidence rule: marketplace deposit/shipping trap",
+        "Crypto doubling, giveaway, or investment bait",
+        "Too-easy job or daily-payout offer",
+        "Marketplace deposit or shipping trap"
+      ]
+    },
+    {
+      "id": "en_bank_bkash",
+      "text": "URGENT: Your bKash account is suspended. Click http://bkash-verify.xyz to reactivate it within 24 hours.",
+      "language": "English",
+      "category": "bank_kyc",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.990357,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Account-suspension phishing with a lookalike domain.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "account threat with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: account threat with a suspicious link",
+        "Account suspension or verification threat",
+        "Suspicious or obfuscated link",
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "en_bank_nagad_kyc",
+      "text": "Nagad: Your KYC is pending and your account will be blocked today. Update your details at http://nagad-kyc-update.top",
+      "language": "English",
+      "category": "bank_kyc",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.883598,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "KYC phishing with a short deadline.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "account threat with a suspicious link",
+        "KYC update with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: account threat with a suspicious link",
+        "Fake KYC update request",
+        "Account suspension or verification threat",
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "en_bank_paypal",
+      "text": "Your PayPal account has been limited. Verify your identity at https://paypal-secure-check.live to restore access.",
+      "language": "English",
+      "category": "bank_kyc",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.543787,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "PayPal limited-account phishing.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "account threat with a suspicious link",
+        "brand phishing with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: account threat with a suspicious link",
+        "Account suspension or verification threat",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "en_bank_sbi",
+      "text": "SBI Alert: Your account will be frozen. Download the verification app at http://sbi-kyc-apk.xyz and complete KYC now.",
+      "language": "English",
+      "category": "bank_kyc",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.874317,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Bank account freeze phishing with an APK lure.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "account threat with a suspicious link",
+        "KYC update with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: account threat with a suspicious link",
+        "Fake KYC update request",
+        "Account suspension or verification threat",
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "en_bank_chase",
+      "text": "Chase Fraud Alert: A $480 transfer was attempted. If this was not you, verify at http://chase-alert-center.click",
+      "language": "English",
+      "category": "bank_kyc",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.253893,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Fraud-alert phishing using a bank brand and a suspicious domain.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "account threat with a suspicious link",
+        "brand phishing with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: account threat with a suspicious link",
+        "Account suspension or verification threat",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "en_kyc_obfuscated",
+      "text": "Your KYC is incomplete. Click bit[.]ly/kyc-update-now and submit your ID to avoid permanent suspension.",
+      "language": "English",
+      "category": "kyc_phishing",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.735033,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Defanged link plus KYC language.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "KYC update with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: KYC update with a suspicious link",
+        "Fake KYC update request",
+        "Semantically close to a known scam script",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "en_delivery_customs",
+      "text": "A package addressed to you is stuck at the customs desk. Settle the 3.50 USD release charge at hxxp://customs-release.top to get it moving.",
+      "language": "English",
+      "category": "delivery_otp",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.905652,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Small customs fee for a parcel that does not exist.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "delivery/customs fee with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: delivery/customs fee with a suspicious link",
+        "Delivery fee or customs-fee request",
+        "Semantically close to a known scam script",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "en_delivery_otp",
+      "text": "Our courier is at your door. Reply with the 6-digit OTP you just received so we can complete the delivery.",
+      "language": "English",
+      "category": "delivery_otp",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.149032,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "OTP theft disguised as a courier request.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "remote OTP or verification-code request"
+      ],
+      "signals": [
+        "High-confidence rule: remote OTP or verification-code request",
+        "Attempt to obtain an OTP or verification code",
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "en_delivery_usps",
+      "text": "USPS: Your package could not be delivered because the address is incomplete. Pay $1.99 at http://usps-redelivery.top",
+      "language": "English",
+      "category": "delivery_otp",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.157522,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "USPS-themed redelivery fee phishing.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "delivery/customs fee with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: delivery/customs fee with a suspicious link",
+        "Delivery fee or customs-fee request",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "en_delivery_dhl",
+      "text": "DHL Express: Shipment AWB 7842 is on hold. Pay the $4.50 customs fee at http://dhl-fee-payment.xyz to release it.",
+      "language": "English",
+      "category": "delivery_otp",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.076233,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "DHL-themed shipment fee phishing.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "delivery/customs fee with a suspicious link",
+        "account threat with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: delivery/customs fee with a suspicious link",
+        "Delivery fee or customs-fee request",
+        "Account suspension or verification threat",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "en_job_whatsapp",
+      "text": "Work from home and earn $500 per day. No experience needed. WhatsApp us at +1 202-555-0199 to start today.",
+      "language": "English",
+      "category": "job",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.786248,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Daily-payout work-from-home bait.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Semantically close to a known scam script",
+        "Too-easy job or daily-payout offer"
+      ]
+    },
+    {
+      "id": "en_job_telegram",
+      "text": "Urgent hiring for data entry. Daily payout of $300. Join our Telegram now: https://t.me/quick-cash-jobs",
+      "language": "English",
+      "category": "job",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.990695,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Telegram data-entry job with upfront onboarding.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Too-easy job or daily-payout offer",
+        "Suspicious or obfuscated link",
+        "Urgency or deadline pressure"
+      ]
+    },
+    {
+      "id": "en_job_amazon",
+      "text": "Amazon is hiring remote product testers. Keep the products and earn $2,000 per week. Apply at http://amazon-careers.top",
+      "language": "English",
+      "category": "job",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.748277,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Brand impersonation in a fake work-from-home offer.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Too-easy job or daily-payout offer",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "en_job_hotel_fee",
+      "text": "You are selected for a hotel receptionist job in Dubai. Pay a $95 visa processing fee to confirm your slot.",
+      "language": "English",
+      "category": "job",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.739493,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Employment scam that asks for a registration fee.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "job offer with an upfront fee"
+      ],
+      "signals": [
+        "High-confidence rule: job offer with an upfront fee",
+        "Romance or emergency-money pattern"
+      ]
+    },
+    {
+      "id": "en_romance_soldier",
+      "text": "My dear, I am a US soldier on a peacekeeping mission. I need $1,200 for a visa to finally meet you. Please send it via Zelle.",
+      "language": "English",
+      "category": "romance",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.898091,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Classic romance scam with a visa emergency.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Semantically close to a known scam script",
+        "Romance or emergency-money pattern"
+      ]
+    },
+    {
+      "id": "en_romance_doctor",
+      "text": "I feel a deep connection with you. Can you help me with $800 for my mother's hospital bill? I will repay you when I arrive.",
+      "language": "English",
+      "category": "romance",
+      "expected": "SPAM",
+      "predicted": "SUSPICIOUS",
+      "spam_probability": 0.357948,
+      "hard_pass": false,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Romance scam with a hospital emergency.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Romance or emergency-money pattern"
+      ]
+    },
+    {
+      "id": "en_romance_ticket",
+      "text": "I bought a ticket to visit you, but customs is asking for a $250 clearance fee. Please pay it so I can finally see you.",
+      "language": "English",
+      "category": "romance",
+      "expected": "SPAM",
+      "predicted": "SUSPICIOUS",
+      "spam_probability": 0.374866,
+      "hard_pass": false,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Romance scam with a ticket and customs-fee story.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Delivery fee or customs-fee request",
+        "Romance or emergency-money pattern"
+      ]
+    },
+    {
+      "id": "en_loan_preapproved",
+      "text": "Pre-approved loan of $5,000 at 0% interest. No documents, no credit check. Apply here: http://instant-loan.top",
+      "language": "English",
+      "category": "loan_investment",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.769932,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Zero-interest loan bait with no documents.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Loan or guaranteed-return investment bait",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "en_invest_double",
+      "text": "Double your money in 24 hours. Minimum investment $50, guaranteed returns. Limited slots. Contact me on WhatsApp.",
+      "language": "English",
+      "category": "loan_investment",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.924398,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Guaranteed daily returns with a small minimum.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "unrealistic exchange or money-doubling pattern"
+      ],
+      "signals": [
+        "High-confidence rule: unrealistic exchange or money-doubling pattern",
+        "Unrealistic exchange or money-doubling offer",
+        "Crypto doubling, giveaway, or investment bait",
+        "Too-easy job or daily-payout offer"
+      ]
+    },
+    {
+      "id": "en_tech_microsoft",
+      "text": "Microsoft Security Alert: Your device is infected with 5 viruses. Call +1 202-555-0199 immediately and allow remote access.",
+      "language": "English",
+      "category": "tech_support",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.644244,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Tech-support scam with remote access.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "tech-support remote-access scam"
+      ],
+      "signals": [
+        "High-confidence rule: tech-support remote-access scam",
+        "Semantically close to a known scam script",
+        "Urgency or deadline pressure",
+        "Impersonation of a brand or authority"
+      ]
+    },
+    {
+      "id": "en_tech_apple",
+      "text": "Your Apple ID has been locked for security reasons. Call +1 202-555-0199 and read the verification code to unlock it.",
+      "language": "English",
+      "category": "tech_support",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.471573,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Apple ID lock phishing.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "tech-support remote-access scam"
+      ],
+      "signals": [
+        "High-confidence rule: tech-support remote-access scam",
+        "Impersonation of a brand or authority"
+      ]
+    },
+    {
+      "id": "en_lottery_500k",
+      "text": "Congratulations! Your mobile number won $500,000 in the international lottery. Pay a $250 processing fee to claim.",
+      "language": "English",
+      "category": "lottery_prize",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.96865,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "International lottery prize with a processing fee.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Prize, lottery, or reward bait"
+      ]
+    },
+    {
+      "id": "en_lottery_prize",
+      "text": "You are today's lucky winner of an iPhone 16 Pro. Claim within 24 hours at http://lucky-winner.top before it expires.",
+      "language": "English",
+      "category": "lottery_prize",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.953498,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Prize bait with an urgent claim link.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "prize/reward claim with a suspicious link",
+        "refund/claim with a suspicious link and urgency"
+      ],
+      "signals": [
+        "High-confidence rule: prize/reward claim with a suspicious link",
+        "Suspicious or obfuscated link",
+        "Prize, lottery, or reward bait",
+        "Urgency or deadline pressure"
+      ]
+    },
+    {
+      "id": "en_promo_iphone",
+      "text": "FREE iPhone 16 Pro! You were selected as today's lucky visitor. Click http://free-iphone-claim.xyz to claim yours now.",
+      "language": "English",
+      "category": "promo",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.569884,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Free iPhone promotional blast.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "prize/reward claim with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: prize/reward claim with a suspicious link",
+        "Suspicious or obfuscated link",
+        "Prize, lottery, or reward bait"
+      ]
+    },
+    {
+      "id": "en_promo_giftcard",
+      "text": "You have a $500 Amazon gift card waiting. Send us the gift card code and we will activate it for you.",
+      "language": "English",
+      "category": "promo",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.743006,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Gift-card cash-out scheme.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Prize, lottery, or reward bait"
+      ]
+    },
+    {
+      "id": "en_otp_send",
+      "text": "Send me the OTP you just received. I need it to verify your account and release your payment.",
+      "language": "English",
+      "category": "otp_theft",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.0104,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Direct OTP request without a legitimate context.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "remote OTP or verification-code request"
+      ],
+      "signals": [
+        "High-confidence rule: remote OTP or verification-code request",
+        "Attempt to obtain an OTP or verification code",
+        "Semantically close to a known scam script",
+        "Impersonation of a brand or authority"
+      ]
+    },
+    {
+      "id": "en_otp_batao",
+      "text": "Bro OTP batao quickly, bank se call aaya hai. Code share karo, account block ho jayega.",
+      "language": "English",
+      "category": "otp_theft",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.106457,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Code-switched request for a verification code.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "remote OTP or verification-code request"
+      ],
+      "signals": [
+        "High-confidence rule: remote OTP or verification-code request",
+        "Attempt to obtain an OTP or verification code"
+      ]
+    },
+    {
+      "id": "en_account_ip",
+      "text": "Unauthorized login detected. Verify your account at http://192.168.1.44/login to avoid suspension.",
+      "language": "English",
+      "category": "bank_kyc",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.543139,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "IP-address login page, a clear phishing indicator.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "account threat with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: account threat with a suspicious link",
+        "Account suspension or verification threat",
+        "Semantically close to a known scam script",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "en_obf_bitly",
+      "text": "Your refund is ready. Claim it at bit[.]ly/refund-92831 before it expires tonight.",
+      "language": "English",
+      "category": "obfuscated_url",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.631583,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Defanged short link hiding the destination.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "refund/claim with a suspicious link and urgency"
+      ],
+      "signals": [
+        "High-confidence rule: refund/claim with a suspicious link and urgency",
+        "Suspicious or obfuscated link",
+        "Disguised link or spaced-out text"
+      ]
+    },
+    {
+      "id": "en_obf_walmart",
+      "text": "Your Walmart gift card is ready: w.a.l.m.a.r.t/claim-gift. Verify your details to receive it.",
+      "language": "English",
+      "category": "obfuscated_url",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.864822,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Spaced-out brand domain used to evade filters.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "prize/reward claim with a suspicious link",
+        "refund/claim with a suspicious link and urgency"
+      ],
+      "signals": [
+        "High-confidence rule: prize/reward claim with a suspicious link",
+        "Suspicious or obfuscated link",
+        "Disguised link or spaced-out text",
+        "Prize, lottery, or reward bait"
+      ]
+    },
+    {
+      "id": "en_obf_paypa1",
+      "text": "Security alert: verify your PayPal account at hxxps://paypa1-secure.top/login immediately.",
+      "language": "English",
+      "category": "obfuscated_url",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.983587,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Leetspeak typosquat plus hxxp scheme.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "account threat with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: account threat with a suspicious link",
+        "Account suspension or verification threat",
+        "Suspicious or obfuscated link",
+        "Disguised link or spaced-out text"
+      ]
+    },
+    {
+      "id": "en_typo_amazon",
+      "text": "Amazon: Your order is on hold. Confirm your payment at https://amaz0n-support.top/verify to avoid cancellation.",
+      "language": "English",
+      "category": "obfuscated_url",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.25978,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Typosquatted Amazon domain.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "account threat with a suspicious link",
+        "brand phishing with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: account threat with a suspicious link",
+        "Account suspension or verification threat",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "en_emoji_prize",
+      "text": "You won a free iPhone! Click http://gift-claim.xyz now to claim your prize before midnight.",
+      "language": "English",
+      "category": "promo",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.971088,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Emoji-heavy prize blast.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "prize/reward claim with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: prize/reward claim with a suspicious link",
+        "Suspicious or obfuscated link",
+        "Prize, lottery, or reward bait"
+      ]
+    },
+    {
+      "id": "mixed_bn_en_bank",
+      "text": "URGENT: আপনার account suspend হয়েছে. এখনই KYC update করুন: http://bkash-verify.xyz",
+      "language": "mixed",
+      "category": "bank_kyc",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.997552,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Bengali-English code-mixed account suspension.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "account threat with a suspicious link",
+        "KYC update with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: account threat with a suspicious link",
+        "Fake KYC update request",
+        "Account suspension or verification threat",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "mixed_hi_en_otp",
+      "text": "Aapka OTP 482913 है. Send it to our agent to complete verification, warna account block ho jayega.",
+      "language": "mixed",
+      "category": "otp_theft",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.039139,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Hindi-English code-mixed OTP request.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "remote OTP or verification-code request"
+      ],
+      "signals": [
+        "High-confidence rule: remote OTP or verification-code request",
+        "Attempt to obtain an OTP or verification code",
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "mixed_ar_en_bank",
+      "text": "عاجل: Your bank account is suspended. تحقق الآن: http://bank-verify.xyz",
+      "language": "mixed",
+      "category": "bank_kyc",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.987421,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Arabic-English account threat with a phishing link.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "account threat with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: account threat with a suspicious link",
+        "Account suspension or verification threat",
+        "Semantically close to a known scam script",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "mixed_es_en_delivery",
+      "text": "Su paquete está retenido. Pay $2.99 here: http://track-parcel.xyz to release it today.",
+      "language": "mixed",
+      "category": "delivery_otp",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.413818,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Spanish-English delivery fee phishing.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "delivery/customs fee with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: delivery/customs fee with a suspicious link",
+        "Delivery fee or customs-fee request",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "bn_lottery",
+      "text": "অভিনন্দন! আপনি ৫,০০,০০০ টাকা জিতেছেন। পুরস্কার পেতে আপনার বিকাশ নম্বর পাঠান এবং ৫০০ টাকা প্রসেসিং ফি দিন।",
+      "language": "Bengali",
+      "category": "lottery_prize",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.989411,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Bengali lottery scam asking for a bKash number.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Semantically close to a known scam script",
+        "Prize, lottery, or reward bait",
+        "Direct request to send money or pay a fee"
+      ]
+    },
+    {
+      "id": "bn_bkash_kyc",
+      "text": "জরুরি: আপনার বিকাশ অ্যাকাউন্ট সাসপেন্ড করা হয়েছে। এখনই এই লিঙ্কে KYC আপডেট করুন: http://bkash-verify.xyz",
+      "language": "Bengali",
+      "category": "bank_kyc",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.991822,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Bengali bKash suspension and KYC phishing.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "account threat with a suspicious link",
+        "KYC update with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: account threat with a suspicious link",
+        "Fake KYC update request",
+        "Account suspension or verification threat",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "bn_delivery_otp",
+      "text": "আপনার পার্সেল কাস্টমসে আটকে আছে। ডেলিভারি সম্পন্ন করতে কুরিয়ারকে আপনার OTP দিন। কোড: ৪৮২৯১৩।",
+      "language": "Bengali",
+      "category": "delivery_otp",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.800431,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Bengali courier OTP request.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "remote OTP or verification-code request"
+      ],
+      "signals": [
+        "High-confidence rule: remote OTP or verification-code request",
+        "Attempt to obtain an OTP or verification code"
+      ]
+    },
+    {
+      "id": "bn_p2p",
+      "text": "ভাই, আমাকে ৫০০ টাকা পাঠাও, আমি তোমাকে ৫০,০০০ টাকা ফেরত দেব। মাত্র একটি সুযোগ।",
+      "language": "Bengali",
+      "category": "p2p_bait",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.936029,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Bengali money-multiplying bait.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "unrealistic exchange or money-doubling pattern"
+      ],
+      "signals": [
+        "High-confidence rule: unrealistic exchange or money-doubling pattern",
+        "Unrealistic exchange or money-doubling offer",
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "bn_job",
+      "text": "ঘরে বসে প্রতিদিন ২,০০০ টাকা আয় করুন। কোনো অভিজ্ঞতা লাগবে না। WhatsApp করুন: +8801712345678।",
+      "language": "Bengali",
+      "category": "job",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.960225,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Bengali daily-payout work-from-home scam.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Too-easy job or daily-payout offer",
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "bn_romance",
+      "text": "প্রিয়, আমি বিদেশে সেনাবাহিনীতে আছি। তোমার সাথে দেখা করতে ২০,০০০ টাকা দরকার। বিকাশে পাঠাও।",
+      "language": "Bengali",
+      "category": "romance",
+      "expected": "SPAM",
+      "predicted": "SUSPICIOUS",
+      "spam_probability": 0.482155,
+      "hard_pass": false,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Bengali romance scam with a visa emergency.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "banglish_p2p",
+      "text": "Bhai 500 taka bhej, ami tomake 50,000 taka ferot debo. Guarantee diyechi.",
+      "language": "Banglish",
+      "category": "p2p_bait",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.918515,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Romanized Bengali P2P doubling bait.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "unrealistic exchange or money-doubling pattern"
+      ],
+      "signals": [
+        "High-confidence rule: unrealistic exchange or money-doubling pattern",
+        "Unrealistic exchange or money-doubling offer"
+      ]
+    },
+    {
+      "id": "banglish_kyc",
+      "text": "Apnar bKash account suspend hoyeche. Ekhoni KYC update korun: http://bkash-verify.xyz",
+      "language": "Banglish",
+      "category": "bank_kyc",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.996668,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Romanized Bengali KYC phishing.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "account threat with a suspicious link",
+        "KYC update with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: account threat with a suspicious link",
+        "Fake KYC update request",
+        "Account suspension or verification threat",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "banglish_delivery",
+      "text": "Apnar parcel customs e atke ache. 500 taka clearance fee din: http://track-parcel.xyz",
+      "language": "Banglish",
+      "category": "delivery_otp",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.994371,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Romanized Bengali delivery fee phishing.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "delivery/customs fee with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: delivery/customs fee with a suspicious link",
+        "Delivery fee or customs-fee request",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "banglish_job",
+      "text": "Ghore boshe protidin 2,000 taka income korun. Experience lagbe na. WhatsApp korun: +8801712345678",
+      "language": "Banglish",
+      "category": "job",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.958582,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Romanized Bengali work-from-home bait.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Too-easy job or daily-payout offer"
+      ]
+    },
+    {
+      "id": "hi_lottery",
+      "text": "बधाई हो! आपका नंबर ₹5,00,000 का इनाम जीता है। पुरस्कार पाने के लिए ₹500 प्रोसेसिंग फीस भेजें और अपना Paytm नंबर दें।",
+      "language": "Hindi",
+      "category": "lottery_prize",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.953135,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Hindi lottery scam with a processing fee.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "hi_kyc",
+      "text": "जरूरी: आपका SBI अकाउंट सस्पेंड हो गया है। तुरंत KYC अपडेट करें: http://sbi-kyc.xyz",
+      "language": "Hindi",
+      "category": "bank_kyc",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.965103,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Hindi SBI KYC phishing.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "account threat with a suspicious link",
+        "KYC update with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: account threat with a suspicious link",
+        "Fake KYC update request",
+        "Account suspension or verification threat",
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "hi_delivery",
+      "text": "आपका पार्सल कस्टम्स में रुका है। ₹200 क्लीयरेंस फीस भेजें: http://track-parcel.xyz",
+      "language": "Hindi",
+      "category": "delivery_otp",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.951571,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Hindi customs-fee delivery scam.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "delivery/customs fee with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: delivery/customs fee with a suspicious link",
+        "Delivery fee or customs-fee request",
+        "Semantically close to a known scam script",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "hi_p2p",
+      "text": "भाई, मुझे ₹500 भेज दे, मैं तुझे ₹50,000 वापस दूंगा। सिर्फ एक मौका है।",
+      "language": "Hindi",
+      "category": "p2p_bait",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.878861,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Hindi money-multiplying bait.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "unrealistic exchange or money-doubling pattern"
+      ],
+      "signals": [
+        "High-confidence rule: unrealistic exchange or money-doubling pattern",
+        "Unrealistic exchange or money-doubling offer",
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "hinglish_p2p",
+      "text": "Bhai mujhe 500 bhej de, main tujhe 50,000 wapas dunga. Trust me, ek hi chance hai.",
+      "language": "Hinglish",
+      "category": "p2p_bait",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.854778,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Hinglish unrealistic exchange.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "unrealistic exchange or money-doubling pattern"
+      ],
+      "signals": [
+        "High-confidence rule: unrealistic exchange or money-doubling pattern",
+        "Unrealistic exchange or money-doubling offer",
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "hinglish_kyc",
+      "text": "Aapka KYC pending hai. Turant is link par click karke update karein: bit[.]ly/kyc-update, warna account block ho jayega.",
+      "language": "Hinglish",
+      "category": "bank_kyc",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.994089,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Hinglish KYC phishing with a short link.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "account threat with a suspicious link",
+        "KYC update with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: account threat with a suspicious link",
+        "Fake KYC update request",
+        "Account suspension or verification threat",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "hinglish_otp",
+      "text": "Aapka OTP 482913 hai. Isse hamare agent ko bhej do, verification complete karna hai.",
+      "language": "Hinglish",
+      "category": "otp_theft",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.045495,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Hinglish OTP request.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "remote OTP or verification-code request"
+      ],
+      "signals": [
+        "High-confidence rule: remote OTP or verification-code request",
+        "Attempt to obtain an OTP or verification code"
+      ]
+    },
+    {
+      "id": "es_bank",
+      "text": "BBVA: Su cuenta ha sido bloqueada por actividad sospechosa. Verifique su identidad ahora: http://bbva-seguro.xyz",
+      "language": "Spanish",
+      "category": "bank_kyc",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.963271,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Spanish bank suspension phishing.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "account threat with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: account threat with a suspicious link",
+        "Account suspension or verification threat",
+        "Suspicious or obfuscated link",
+        "Urgency or deadline pressure"
+      ]
+    },
+    {
+      "id": "es_p2p",
+      "text": "Envíame $5 y te daré una RTX 3090 nueva. Solo queda una, amigo.",
+      "language": "Spanish",
+      "category": "p2p_bait",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.260334,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Spanish money-doubling bait.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "unrealistic exchange or money-doubling pattern"
+      ],
+      "signals": [
+        "High-confidence rule: unrealistic exchange or money-doubling pattern",
+        "Unrealistic exchange or money-doubling offer",
+        "Semantically close to a known scam script",
+        "Prize, lottery, or reward bait"
+      ]
+    },
+    {
+      "id": "es_delivery",
+      "text": "Su envío quedó retenido en la aduana. Cubra la tasa de 3,50 USD en http://aduana-pago.top para liberarlo.",
+      "language": "Spanish",
+      "category": "delivery_otp",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.299381,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Spanish delivery fee phishing.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "delivery/customs fee with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: delivery/customs fee with a suspicious link",
+        "Delivery fee or customs-fee request",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "fr_bank",
+      "text": "Votre compte est suspendu pour activité suspecte. Vérifiez votre KYC immédiatement : http://paypal-verification.top",
+      "language": "French",
+      "category": "bank_kyc",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.995403,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "French bank suspension phishing.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "account threat with a suspicious link",
+        "KYC update with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: account threat with a suspicious link",
+        "Fake KYC update request",
+        "Account suspension or verification threat",
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "fr_p2p",
+      "text": "Envoie-moi 5 € et je te donne une RTX 3090 neuve. Il n'en reste qu'une, mon ami.",
+      "language": "French",
+      "category": "p2p_bait",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.298699,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "French money-doubling bait.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "unrealistic exchange or money-doubling pattern"
+      ],
+      "signals": [
+        "High-confidence rule: unrealistic exchange or money-doubling pattern",
+        "Unrealistic exchange or money-doubling offer",
+        "Semantically close to a known scam script",
+        "Direct request to send money or pay a fee"
+      ]
+    },
+    {
+      "id": "fr_delivery",
+      "text": "Un colis à votre nom est bloqué au dédouanement. Réglez 3,50 € sur http://douane-paiement.top pour le libérer.",
+      "language": "French",
+      "category": "delivery_otp",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.190958,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "French customs-fee delivery scam.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "delivery/customs fee with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: delivery/customs fee with a suspicious link",
+        "Delivery fee or customs-fee request",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "ar_bank",
+      "text": "عاجل: تم تعليق حسابك البنكي بسبب نشاط مشبوه. تحقق من بياناتك الآن: http://bank-verify.xyz",
+      "language": "Arabic",
+      "category": "bank_kyc",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.898912,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Arabic bank suspension phishing.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "account threat with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: account threat with a suspicious link",
+        "Account suspension or verification threat",
+        "Semantically close to a known scam script",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "ar_p2p",
+      "text": "أرسل لي 5 دولارات وسأعطيك RTX 3090 جديداً. بقي واحد فقط يا صديقي.",
+      "language": "Arabic",
+      "category": "p2p_bait",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.977719,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Arabic money-doubling bait.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "unrealistic exchange or money-doubling pattern"
+      ],
+      "signals": [
+        "High-confidence rule: unrealistic exchange or money-doubling pattern",
+        "Unrealistic exchange or money-doubling offer",
+        "Semantically close to a known scam script",
+        "Direct request to send money or pay a fee"
+      ]
+    },
+    {
+      "id": "ar_delivery",
+      "text": "شحنتك محتجزة في الجمارك. ادفع 10 ريالات رسوم تخليص هنا: http://track-parcel.xyz",
+      "language": "Arabic",
+      "category": "delivery_otp",
+      "expected": "SPAM",
+      "predicted": "SPAM",
+      "spam_probability": 0.919559,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Arabic delivery fee phishing.",
+      "decision_source": "rule_escalation",
+      "rule_reasons": [
+        "delivery/customs fee with a suspicious link"
+      ],
+      "signals": [
+        "High-confidence rule: delivery/customs fee with a suspicious link",
+        "Delivery fee or customs-fee request",
+        "Semantically close to a known scam script",
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "ham_lunch_5",
+      "text": "Bro can you send me $5 for lunch? I will pay you back tomorrow.",
+      "language": "English",
+      "category": "hard_negative_personal",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.007331,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal friend-to-friend money request with repayment.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Direct request to send money or pay a fee"
+      ]
+    },
+    {
+      "id": "ham_rent_500",
+      "text": "Hey, can you lend me $500 for rent? I will return it next week after my salary.",
+      "language": "English",
+      "category": "hard_negative_personal",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.005873,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal borrowing request with no unrealistic reward.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_mom_hospital",
+      "text": "Mom is in the hospital. Call me as soon as you see this. Nothing to pay, we just need you here.",
+      "language": "English",
+      "category": "hard_negative_urgent",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.001722,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Urgent family message that contains a hospital mention.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_meeting",
+      "text": "Team sync has been shifted to 2:30 PM in Conference Room B. Please skim the slides before we begin.",
+      "language": "English",
+      "category": "hard_negative_work",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.039863,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Ordinary work coordination.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_birthday",
+      "text": "Happy birthday! Hope you have an amazing day with your family.",
+      "language": "English",
+      "category": "hard_negative_personal",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.017484,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal personal greeting with an emoji.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_charger",
+      "text": "I left my charger at your place. Can I grab it tomorrow afternoon?",
+      "language": "English",
+      "category": "hard_negative_personal",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.00362,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal personal logistics.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_movie",
+      "text": "Are you free this weekend to watch the new movie? I can book the tickets.",
+      "language": "English",
+      "category": "hard_negative_personal",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.034649,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal social plan.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Prize, lottery, or reward bait"
+      ]
+    },
+    {
+      "id": "ham_split_bill",
+      "text": "Split the bill? Your share is $14. I will send a request on Venmo.",
+      "language": "English",
+      "category": "hard_negative_money",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.005122,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Bill splitting with a payment app but no scam pattern.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_mistake_50",
+      "text": "I sent you $50 by mistake. Can you send it back when you get a chance? No rush.",
+      "language": "English",
+      "category": "hard_negative_money",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.027281,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "A genuine mistaken transfer, textually close to the scam variant.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "ham_salary",
+      "text": "Your salary of $2,450 has been credited to your account ending 4421. Thank you.",
+      "language": "English",
+      "category": "hard_negative_bank",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.038255,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Legitimate salary credit notification.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_bank_debit",
+      "text": "Your account was debited by $50.00 at Walmart. Available balance is $1,250.00.",
+      "language": "English",
+      "category": "hard_negative_bank",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.010079,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Legitimate debit alert with no link or threat.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_login_alert",
+      "text": "We noticed a sign-in from a new browser. If that was you, you can ignore this. Security settings: https://www.chase.com/security",
+      "language": "English",
+      "category": "hard_negative_bank",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.03276,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "A real security notification that explicitly says no action is needed.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Impersonation of a brand or authority",
+        "Contains a link"
+      ]
+    },
+    {
+      "id": "ham_bank_statement",
+      "text": "Your monthly account statement is ready. View it securely at https://www.icicibank.com/statements.",
+      "language": "English",
+      "category": "hard_negative_bank",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.028237,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Legitimate statement notification with a known domain.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Contains a link"
+      ]
+    },
+    {
+      "id": "ham_otp_private",
+      "text": "Your OTP is 482913. Do not share it with anyone. It expires in 10 minutes.",
+      "language": "English",
+      "category": "hard_negative_otp",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.000223,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Legitimate OTP notification with the correct anti-phishing warning.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_otp_never",
+      "text": "We will never ask for your OTP, PIN, or password. Never share these codes with anyone.",
+      "language": "English",
+      "category": "hard_negative_otp",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.000835,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Security reminder with no link or payment request.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_delivery_agent",
+      "text": "The delivery agent will ask for a 4-digit OTP at your door. Please share it only after the package arrives.",
+      "language": "English",
+      "category": "hard_negative_otp",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.01525,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Legitimate delivery OTP flow: share the code only with the agent at the door.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_delivery_out",
+      "text": "The courier has your parcel and it should reach you today. Live tracking: https://track.dhl.com/ZX-9981.",
+      "language": "English",
+      "category": "hard_negative_delivery",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.096061,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal delivery update with a legitimate tracking domain.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Contains a link"
+      ]
+    },
+    {
+      "id": "ham_delivery_reschedule",
+      "text": "Delivery attempt failed. Reschedule at https://www.fedex.com/reschedule. Your package will be held for 3 days.",
+      "language": "English",
+      "category": "hard_negative_delivery",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.254243,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal failed-delivery reschedule notice.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Semantically close to a known scam script",
+        "Contains a link"
+      ]
+    },
+    {
+      "id": "ham_delivery_pickup",
+      "text": "Your package is ready for pickup at the local post office. Bring your ID and the tracking number.",
+      "language": "English",
+      "category": "hard_negative_delivery",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.01762,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Legitimate pickup instruction with no fee.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_work_proposal",
+      "text": "Can you review the attached proposal and send comments by Friday? The client is waiting.",
+      "language": "English",
+      "category": "hard_negative_work",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.002841,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal work request with a deadline.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_work_invoice",
+      "text": "I attached the invoice for last month. Please process it when you get a chance.",
+      "language": "English",
+      "category": "hard_negative_work",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.022837,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal invoice discussion with no suspicious link.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_work_interview",
+      "text": "We would like to invite you for an interview on Tuesday at 10 AM. Please confirm your availability.",
+      "language": "English",
+      "category": "hard_negative_work",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.082699,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Legitimate interview invitation.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_market_sell",
+      "text": "I am selling my PS5 for $400. Pickup only, no shipping. DM me if you are interested.",
+      "language": "English",
+      "category": "hard_negative_marketplace",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.012591,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Legitimate local sale with pickup only.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Marketplace deposit or shipping trap",
+        "Prize, lottery, or reward bait"
+      ]
+    },
+    {
+      "id": "ham_market_available",
+      "text": "Is the iPhone still available? I can meet at the station at 6 PM and pay cash.",
+      "language": "English",
+      "category": "hard_negative_marketplace",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.00713,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal marketplace negotiation.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Prize, lottery, or reward bait"
+      ]
+    },
+    {
+      "id": "ham_market_paid",
+      "text": "I already paid $80 for your concert ticket. Can you transfer your share of the dinner bill instead?",
+      "language": "English",
+      "category": "hard_negative_marketplace",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.018955,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal ticket payment between friends.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Romance or emergency-money pattern"
+      ]
+    },
+    {
+      "id": "ham_order_shipped",
+      "text": "Good news, your Amazon parcel is on the way. See the delivery status at https://www.amazon.com/orders.",
+      "language": "English",
+      "category": "hard_negative_promo",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.013862,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Legitimate order shipment notification.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Contains a link"
+      ]
+    },
+    {
+      "id": "ham_coupon",
+      "text": "Thanks for subscribing. Here is your 10% coupon code WELCOME10 for your next purchase.",
+      "language": "English",
+      "category": "hard_negative_promo",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.079574,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Opt-in coupon with no urgency or payment request.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Prize, lottery, or reward bait"
+      ]
+    },
+    {
+      "id": "ham_food_order",
+      "text": "Order confirmed. Your meal is being prepared and should arrive within half an hour.",
+      "language": "English",
+      "category": "hard_negative_promo",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.015005,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal food delivery confirmation.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_appointment",
+      "text": "Your appointment is confirmed for 3 PM tomorrow. Reply CANCEL if you need to reschedule.",
+      "language": "English",
+      "category": "hard_negative_promo",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.023941,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal appointment confirmation.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_contract_deadline",
+      "text": "Please send the signed contract by 5 PM today. The client is waiting for it.",
+      "language": "English",
+      "category": "hard_negative_urgent",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.041679,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Urgent but legitimate business request.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_water_leak",
+      "text": "The kitchen sink is leaking badly. Please come back as soon as you can.",
+      "language": "English",
+      "category": "hard_negative_urgent",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.010306,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Urgent home emergency with no money request.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_kyc_branch",
+      "text": "Please complete your KYC at the bank branch by Friday. Bring your ID and address proof.",
+      "language": "English",
+      "category": "hard_negative_bank",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.036499,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Legitimate in-branch KYC request.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Account suspension or verification threat",
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "ham_kyc_complete",
+      "text": "Your KYC verification is complete. No further action is needed.",
+      "language": "English",
+      "category": "hard_negative_bank",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.04862,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Legitimate KYC completion message.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_link_meeting",
+      "text": "Here is the link to the meeting: https://meet.google.com/abc-defg-hij",
+      "language": "English",
+      "category": "hard_negative_link",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.00719,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Ordinary meeting link with a known domain.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Contains a link"
+      ]
+    },
+    {
+      "id": "ham_link_webinar",
+      "text": "Our webinar starts at 6 PM. The Zoom room is https://zoom.us/j/987654321.",
+      "language": "English",
+      "category": "hard_negative_link",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.047221,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Ordinary webinar link.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Contains a link"
+      ]
+    },
+    {
+      "id": "ham_link_photos",
+      "text": "I shared the photos from the trip here: https://photos.app.goo.gl/abc123",
+      "language": "English",
+      "category": "hard_negative_link",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.121542,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal photo-sharing link.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Suspicious or obfuscated link"
+      ]
+    },
+    {
+      "id": "ham_office_raffle",
+      "text": "Congratulations to our team for winning the hackathon! Celebration at 6 PM in the cafeteria.",
+      "language": "English",
+      "category": "hard_negative_prize",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.079979,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Prize language in a harmless office context.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Prize, lottery, or reward bait"
+      ]
+    },
+    {
+      "id": "ham_office_gift",
+      "text": "You won the office raffle! Come pick up your gift card from reception whenever you are free.",
+      "language": "English",
+      "category": "hard_negative_prize",
+      "expected": "NORMAL",
+      "predicted": "SUSPICIOUS",
+      "spam_probability": 0.650785,
+      "hard_pass": false,
+      "block_safe": true,
+      "soft_pass": false,
+      "why": "Legitimate office raffle prize with no fee or link.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Prize, lottery, or reward bait",
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "ham_card_blocked",
+      "text": "The bank blocked my card after the suspicious charge. I will call them tomorrow and sort it out.",
+      "language": "English",
+      "category": "hard_negative_bank",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.029167,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "A card-blocked message with no link or payment request.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_utility_bill",
+      "text": "Your electricity bill is due on Friday. You can pay it through the official app or at the counter.",
+      "language": "English",
+      "category": "hard_negative_bank",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.017295,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal utility bill reminder with an official channel.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_tax_refund",
+      "text": "The tax office says my refund is approved and will arrive in 5 business days. I will check the portal tomorrow.",
+      "language": "English",
+      "category": "hard_negative_bank",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.061304,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Tax refund status mention without a suspicious link.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_insurance",
+      "text": "Your car insurance renewal is due next month. Reply if you want me to send the updated quote.",
+      "language": "English",
+      "category": "hard_negative_bank",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.04297,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal insurance renewal reminder.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ham_emoji_birthday",
+      "text": "Happy birthday! Hope you have a wonderful day with your family and friends.",
+      "language": "English",
+      "category": "hard_negative_personal",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.079013,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Personal message with an emoji and no scam intent.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "bn_dinner",
+      "text": "আজ রাতে খাবি? আমি বাসায় ফিরছি সন্ধ্যায়।",
+      "language": "Bengali",
+      "category": "hard_negative_personal",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.000701,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Bengali dinner plan.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "bn_meeting",
+      "text": "মিটিং সকাল ১০টায় রুম ৩০২-এ হবে। প্রস্তুতি নিয়ে আসবেন।",
+      "language": "Bengali",
+      "category": "hard_negative_work",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.029261,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Bengali meeting reminder.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "bn_otp",
+      "text": "আপনার OTP ৪৮২৯১৩। এটি কারও সাথে শেয়ার করবেন না। ১০ মিনিটে মেয়াদ শেষ হবে।",
+      "language": "Bengali",
+      "category": "hard_negative_otp",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.050926,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Legitimate Bengali OTP notification.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "bn_bank_debit",
+      "text": "আপনার অ্যাকাউন্ট থেকে ৫০০ টাকা ডেবিট হয়েছে। বর্তমান ব্যালেন্স ১২,৫০০ টাকা।",
+      "language": "Bengali",
+      "category": "hard_negative_bank",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.190473,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Bengali debit alert.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "bn_delivery",
+      "text": "আপনার পার্সেল আজ পৌঁছে যাবে। লাইভ ট্র্যাকিং: https://www.daraz.com.bd/tracking",
+      "language": "Bengali",
+      "category": "hard_negative_delivery",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.091825,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Bengali delivery update with a legitimate domain.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Contains a link"
+      ]
+    },
+    {
+      "id": "bn_money_sent",
+      "text": "আমি তোমাকে ৫০০ টাকা পাঠিয়ে দিয়েছি। ব্যাংক চেক করে নিও।",
+      "language": "Bengali",
+      "category": "hard_negative_money",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.022178,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Bengali money transfer notice.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "banglish_chat",
+      "text": "Tumi kemon acho? Aj shondhaye dekha hobe?",
+      "language": "Banglish",
+      "category": "hard_negative_personal",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.00459,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Romanized Bengali chat.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "banglish_otp",
+      "text": "Apnar OTP 482913. Eta karor sathe share korben na.",
+      "language": "Banglish",
+      "category": "hard_negative_otp",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.020696,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Legitimate Romanized Bengali OTP warning.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "banglish_bank",
+      "text": "Apnar account theke 500 taka debit hoyeche. Current balance 12,500 taka.",
+      "language": "Banglish",
+      "category": "hard_negative_bank",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.115871,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Romanized Bengali bank alert.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "banglish_money",
+      "text": "Ami tomake 500 taka pathiye diyechi. Bank check koro.",
+      "language": "Banglish",
+      "category": "hard_negative_money",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.042236,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Romanized Bengali money transfer.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "hi_meeting",
+      "text": "मीटिंग सुबह 10 बजे रूम 302 में है। कृपया समय पर आएं।",
+      "language": "Hindi",
+      "category": "hard_negative_work",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.023552,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Hindi meeting reminder.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "hi_otp",
+      "text": "आपका सत्यापन कोड 739201 है। इसे किसी के साथ साझा न करें।",
+      "language": "Hindi",
+      "category": "hard_negative_otp",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.086224,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Legitimate Hindi OTP notification.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "hi_bank_debit",
+      "text": "आपके खाते से ₹500 डेबिट हुए हैं। उपलब्ध बैलेंस ₹12,500 है।",
+      "language": "Hindi",
+      "category": "hard_negative_bank",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.040673,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Hindi debit alert.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "hi_lunch",
+      "text": "दोपहर में खाना खाएगा? मैं तुम्हारे ऑफिस के पास आ रहा हूं।",
+      "language": "Hindi",
+      "category": "hard_negative_personal",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.000118,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Hindi lunch plan.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "hinglish_chat",
+      "text": "Yaar kal milte hai? Bohot time ho gaya baat kiye.",
+      "language": "Hinglish",
+      "category": "hard_negative_personal",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.001298,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Hinglish chat.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "hinglish_otp_ham",
+      "text": "Aapka verification code 739201 hai. Kisi ko bhi mat batana.",
+      "language": "Hinglish",
+      "category": "hard_negative_otp",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.008584,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Legitimate Hinglish OTP warning.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "hinglish_bank",
+      "text": "Aapke account se ₹500 debit hue hain. Available balance ₹12,500 hai.",
+      "language": "Hinglish",
+      "category": "hard_negative_bank",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.09935,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Hinglish bank alert.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "hinglish_money",
+      "text": "Maine tumhe ₹500 bhej diye hain. Bank check kar lo.",
+      "language": "Hinglish",
+      "category": "hard_negative_money",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.034791,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Hinglish money transfer.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "es_lunch",
+      "text": "¿Me prestas $5 para el almuerzo? Te lo devuelvo mañana.",
+      "language": "Spanish",
+      "category": "hard_negative_personal",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.001505,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Spanish lunch loan.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "es_bank_debit",
+      "text": "Su cuenta fue debitada por $50.00 en Walmart. Saldo disponible: $1,250.00.",
+      "language": "Spanish",
+      "category": "hard_negative_bank",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.015743,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Spanish debit alert.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "es_otp",
+      "text": "Su código OTP es 482913. No lo comparta con nadie.",
+      "language": "Spanish",
+      "category": "hard_negative_otp",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.005004,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Legitimate Spanish OTP warning.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "es_delivery_ok",
+      "text": "El paquete sale para entrega hoy. Seguimiento: https://track.dhl.com/ZX-9981.",
+      "language": "Spanish",
+      "category": "hard_negative_delivery",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.062555,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Spanish delivery update.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Urgency or deadline pressure",
+        "Contains a link"
+      ]
+    },
+    {
+      "id": "fr_lunch",
+      "text": "Tu peux me prêter 5 € pour le déjeuner ? Je te rembourse demain.",
+      "language": "French",
+      "category": "hard_negative_personal",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.011325,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal French lunch loan.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Semantically close to a known scam script"
+      ]
+    },
+    {
+      "id": "fr_bank_debit",
+      "text": "Votre compte a été débité de 50 € chez Walmart. Solde disponible : 1 250 €.",
+      "language": "French",
+      "category": "hard_negative_bank",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.026087,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal French debit alert.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "fr_otp",
+      "text": "Votre code OTP est 482913. Ne le partagez avec personne.",
+      "language": "French",
+      "category": "hard_negative_otp",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.009039,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Legitimate French OTP warning.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "fr_delivery_ok",
+      "text": "Le colis est sorti pour livraison aujourd'hui. Suivi : https://track.dhl.com/ZX-9981.",
+      "language": "French",
+      "category": "hard_negative_delivery",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.01458,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal French delivery update.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Urgency or deadline pressure",
+        "Contains a link"
+      ]
+    },
+    {
+      "id": "ar_family",
+      "text": "أمي في المستشفى. اتصل بي فور رؤية هذه الرسالة.",
+      "language": "Arabic",
+      "category": "hard_negative_personal",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.033589,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Arabic family emergency.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ar_bank_debit",
+      "text": "تم خصم 50 دولاراً من حسابك في وول مارت. الرصيد المتاح 1,250 دولاراً.",
+      "language": "Arabic",
+      "category": "hard_negative_bank",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.133971,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Arabic debit alert.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ar_otp",
+      "text": "رمز OTP الخاص بك هو 482913. لا تشاركه مع أي شخص.",
+      "language": "Arabic",
+      "category": "hard_negative_otp",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.004182,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Legitimate Arabic OTP warning.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "ar_delivery_ok",
+      "text": "الشحنة خرجت للتوصيل اليوم. التتبع: https://track.dhl.com/ZX-9981.",
+      "language": "Arabic",
+      "category": "hard_negative_delivery",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.014328,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Arabic delivery update.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Contains a link"
+      ]
+    },
+    {
+      "id": "mixed_bn_en_normal",
+      "text": "Hope তোমার জীবন becomes সমৃদ্ধ! আজ dinner একসাথে করি?",
+      "language": "mixed",
+      "category": "hard_negative_personal",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.010545,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Bengali-English code-mixed personal message.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "mixed_hi_en_normal",
+      "text": "Team meeting kal 10 AM par hai. Please notes ready rakhna.",
+      "language": "mixed",
+      "category": "hard_negative_work",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.010086,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Hindi-English code-mixed work message.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    },
+    {
+      "id": "mixed_ar_en_normal",
+      "text": "رابط الاجتماع هنا: https://meet.google.com/xyz-abcd-efg",
+      "language": "mixed",
+      "category": "hard_negative_link",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.001666,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Arabic-English meeting link.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": [
+        "Contains a link"
+      ]
+    },
+    {
+      "id": "mixed_es_en_normal",
+      "text": "Nos vemos mañana at 6 PM. Bring the tickets, por favor.",
+      "language": "mixed",
+      "category": "hard_negative_personal",
+      "expected": "NORMAL",
+      "predicted": "NORMAL",
+      "spam_probability": 0.000785,
+      "hard_pass": true,
+      "block_safe": true,
+      "soft_pass": true,
+      "why": "Normal Spanish-English personal message.",
+      "decision_source": "calibrated_model",
+      "rule_reasons": [],
+      "signals": []
+    }
+  ]
+}

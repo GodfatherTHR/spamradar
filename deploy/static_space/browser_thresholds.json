@@ -1,0 +1,38 @@
+{
+  "spam_threshold": 0.924517,
+  "suspicious_threshold": 0.6372,
+  "fpr_target": 0.01,
+  "suspicious_fpr_target": 0.05,
+  "tuned_on": "val_tune",
+  "val_tune_metrics": {
+    "threshold": 0.924517,
+    "precision": 0.948784,
+    "recall": 0.715251,
+    "f1": 0.81563,
+    "fpr": 0.009657,
+    "fnr": 0.284749,
+    "tp": 741,
+    "fp": 40,
+    "tn": 4102,
+    "fn": 295,
+    "predicted_spam": 781
+  },
+  "suspicious_metrics": {
+    "threshold": 0.6372,
+    "precision": 0.815482,
+    "recall": 0.874517,
+    "f1": 0.843968,
+    "fpr": 0.049493,
+    "fnr": 0.125483,
+    "tp": 906,
+    "fp": 205,
+    "tn": 3937,
+    "fn": 130,
+    "predicted_spam": 1111
+  },
+  "risk_tiers": {
+    "NORMAL": "< 0.6372",
+    "SUSPICIOUS": "[0.6372, 0.9245)",
+    "SPAM": ">= 0.9245"
+  }
+}

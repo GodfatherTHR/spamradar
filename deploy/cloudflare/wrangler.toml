@@ -1,0 +1,12 @@
+name = "spamradar-proxy"
+main = "cloudflare-worker.js"
+compatibility_date = "2026-11-16"
+
+[vars]
+API_ORIGIN = "https://toriqulhaque-spamradar.static.hf.space"
+
+# Replace the placeholder with your own Cloudflare zone and subdomain,
+# then uncomment this block before deploying.
+# routes = [
+#   { pattern = "spam.yourdomain.com/*", zone_name = "yourdomain.com" }
+# ]

@@ -1,0 +1,327 @@
+{
+  "project": "multilingual_spam_detector",
+  "version": "1.0.0",
+  "seed": 42,
+  "raw_sources": {
+    "scamshield": {
+      "rows_loaded": 81113,
+      "rows_after_cap": 72000,
+      "spam": 27507,
+      "ham": 44493
+    },
+    "uci": {
+      "rows_loaded": 5572,
+      "rows_after_cap": 5572,
+      "spam": 747,
+      "ham": 4825
+    },
+    "bengali": {
+      "rows_loaded": 7005,
+      "rows_after_cap": 7005,
+      "spam": 4517,
+      "ham": 2488
+    },
+    "hindi": {
+      "rows_loaded": 15000,
+      "rows_after_cap": 15000,
+      "spam": 7500,
+      "ham": 7500
+    },
+    "arabic": {
+      "rows_loaded": 630,
+      "rows_after_cap": 630,
+      "spam": 200,
+      "ham": 430
+    },
+    "spanish": {
+      "rows_loaded": 300,
+      "rows_after_cap": 300,
+      "spam": 165,
+      "ham": 135
+    },
+    "french": {
+      "rows_loaded": 2000,
+      "rows_after_cap": 2000,
+      "spam": 1000,
+      "ham": 1000
+    },
+    "merged": {
+      "rows_loaded": 138812,
+      "rows_after_cap": 48000,
+      "spam": 20915,
+      "ham": 27085
+    },
+    "multilang": {
+      "rows_loaded": 134812,
+      "rows_after_cap": 42000,
+      "spam": 21283,
+      "ham": 20717
+    },
+    "p2p": {
+      "rows_loaded": 8304,
+      "rows_after_cap": 8304,
+      "spam": 767,
+      "ham": 7537
+    },
+    "urgency": {
+      "rows_loaded": 1000,
+      "rows_after_cap": 1000,
+      "spam": 1000,
+      "ham": 0
+    },
+    "synthetic": {
+      "rows_loaded": 10770,
+      "rows_after_cap": 10770,
+      "spam": 5460,
+      "ham": 5310
+    }
+  },
+  "basic_filter": {
+    "input": 212581,
+    "output": 212453,
+    "dropped": 128
+  },
+  "quality_filter": {
+    "examined": 14384,
+    "dropped_negative_phishing": 3,
+    "dropped_positive_legit": 53
+  },
+  "dedupe": {
+    "input_rows": 212397,
+    "output_rows": 150866,
+    "rows_removed": 61531,
+    "clusters": 150946,
+    "conflicting_clusters_dropped": 80,
+    "conflicting_rows": 1822,
+    "conflicting_clusters_kept": 28
+  },
+  "split": {
+    "groups": 144601,
+    "groups_with_overlap": 0,
+    "split_rows": {
+      "train": 120659,
+      "test": 15162,
+      "val": 15045
+    },
+    "exact_hash_overlap_train_val": 0,
+    "exact_hash_overlap_train_test": 0,
+    "exact_hash_overlap_val_test": 0
+  },
+  "label_by_split": {
+    "train": {
+      "rows": 120659,
+      "spam": 54232,
+      "ham": 66427,
+      "spam_prior": 0.4495
+    },
+    "val": {
+      "rows": 15045,
+      "spam": 6761,
+      "ham": 8284,
+      "spam_prior": 0.4494
+    },
+    "test": {
+      "rows": 15162,
+      "spam": 6848,
+      "ham": 8314,
+      "spam_prior": 0.4517
+    },
+    "val_cal": {
+      "rows": 5177,
+      "spam": 1035,
+      "ham": 4142,
+      "spam_prior": 0.1999
+    },
+    "val_tune": {
+      "rows": 5178,
+      "spam": 1036,
+      "ham": 4142,
+      "spam_prior": 0.2001
+    },
+    "test_realistic": {
+      "rows": 10392,
+      "spam": 2078,
+      "ham": 8314,
+      "spam_prior": 0.2
+    }
+  },
+  "language_by_split": {
+    "train": {
+      "English": 99041,
+      "Hinglish": 5477,
+      "French": 3794,
+      "Hindi": 2268,
+      "Banglish": 1974,
+      "Bengali": 1960,
+      "Spanish": 1823,
+      "mixed": 1724,
+      "German": 1405,
+      "Arabic": 1187,
+      "Tamil": 2,
+      "ms": 1,
+      "Malayalam": 1,
+      "Telugu": 1,
+      "nl": 1
+    },
+    "val": {
+      "English": 12335,
+      "Hinglish": 685,
+      "French": 495,
+      "Banglish": 300,
+      "Hindi": 253,
+      "Spanish": 237,
+      "mixed": 232,
+      "Bengali": 201,
+      "German": 176,
+      "Arabic": 130,
+      "Malayalam": 1
+    },
+    "test": {
+      "English": 12423,
+      "Hinglish": 698,
+      "French": 479,
+      "Bengali": 304,
+      "Hindi": 304,
+      "Banglish": 289,
+      "mixed": 209,
+      "Spanish": 188,
+      "German": 175,
+      "Arabic": 92,
+      "Telugu": 1
+    }
+  },
+  "source_by_label": {
+    "arabic_sms": {
+      "rows": 626,
+      "spam": 196,
+      "ham": 430
+    },
+    "synthetic": {
+      "rows": 7020,
+      "spam": 4298,
+      "ham": 2722
+    },
+    "bengali_smishing": {
+      "rows": 6644,
+      "spam": 4230,
+      "ham": 2414
+    },
+    "scamshield:Smishing_Dataset": {
+      "rows": 58803,
+      "spam": 23234,
+      "ham": 35569
+    },
+    "scamshield:UCI_SMS_Spam": {
+      "rows": 4398,
+      "spam": 477,
+      "ham": 3921
+    },
+    "scamshield:Indian_Telecom_SMS": {
+      "rows": 1068,
+      "spam": 357,
+      "ham": 711
+    },
+    "scamshield:ysangam/Indian_Cyber_Scam_Hinglish": {
+      "rows": 645,
+      "spam": 542,
+      "ham": 103
+    },
+    "scamshield:Benchmark_Ground_Truth": {
+      "rows": 32,
+      "spam": 10,
+      "ham": 22
+    },
+    "uci_sms": {
+      "rows": 1033,
+      "spam": 242,
+      "ham": 791
+    },
+    "merged_sms": {
+      "rows": 45659,
+      "spam": 20459,
+      "ham": 25200
+    },
+    "multilang_sms": {
+      "rows": 18875,
+      "spam": 11454,
+      "ham": 7421
+    },
+    "p2p_sms": {
+      "rows": 3256,
+      "spam": 758,
+      "ham": 2498
+    },
+    "french_reviews": {
+      "rows": 2000,
+      "spam": 1000,
+      "ham": 1000
+    },
+    "hindi_sms": {
+      "rows": 50,
+      "spam": 25,
+      "ham": 25
+    },
+    "scamshield:Synthetic_Tier_C": {
+      "rows": 378,
+      "spam": 315,
+      "ham": 63
+    },
+    "spanish_sms": {
+      "rows": 300,
+      "spam": 165,
+      "ham": 135
+    },
+    "phishing_email": {
+      "rows": 79,
+      "spam": 79,
+      "ham": 0
+    }
+  },
+  "top_categories": {
+    "benign": 70384,
+    "merged_sms_spam": 20459,
+    "general_spam_telemarketing": 20172,
+    "promotional_sms": 11454,
+    "service_sms": 7421,
+    "bengali_smishing": 2592,
+    "bengali_promotional": 1638,
+    "upi_fraud": 1320,
+    "french_spam": 1000,
+    "fake_kyc": 954,
+    "lottery_prize": 939,
+    "courier_scam": 829,
+    "benign_banking_transaction_alert": 772,
+    "promotional_marketing": 758,
+    "marketplace": 675,
+    "benign_delivery_order_update": 575,
+    "benign_reminder_bill_alert": 411,
+    "crypto": 403,
+    "p2p_bait": 401,
+    "loan_scam": 383,
+    "bank_kyc": 351,
+    "promo": 349,
+    "romance": 348,
+    "job": 326,
+    "delivery_otp": 301,
+    "loan_investment": 293,
+    "personal": 291,
+    "tech_support": 289,
+    "bank_alert": 282,
+    "telegram_job": 248,
+    "sms_spam": 242,
+    "work": 217,
+    "link_legit": 211,
+    "kyc_legit": 199,
+    "arabic_sms_spam": 196,
+    "money_legit": 193,
+    "promo_optin": 193,
+    "urgent_legit": 189,
+    "delivery": 188,
+    "electricity_disconnection": 187
+  },
+  "realistic_priors": {
+    "val_cal": 0.1999,
+    "val_tune": 0.2001,
+    "test_realistic": 0.2
+  }
+}

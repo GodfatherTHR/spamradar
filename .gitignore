@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Secrets and local configuration
+.env
+.env.*
+*.log
+
+# Raw and split data
+data/raw/
+data/processed/*.csv
+
+# Large embeddings and ONNX files
+artifacts/embeddings/
+artifacts/semantic_encoder.onnx
+artifacts/semantic_encoder_int8.onnx
+artifacts/tokenizer.json
+artifacts/tokenizer/tokenizer.json
+
+# Generated screenshots
+artifacts/ui_*.png
+
+# Staged Docker Space copies
+deploy/hf_space/artifacts/
+deploy/hf_space/src/
+deploy/hf_space/app/
+deploy/hf_space/web/
+deploy/hf_space/data/
+deploy/hf_space/staged_api.log
+
+# Local build and test output
+paper/*.aux
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.log
+paper/*.out
+paper/preview/
+deploy/upload.log
+deploy/*.png
+deploy/sample_scores.json

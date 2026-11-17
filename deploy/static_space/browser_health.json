@@ -1,0 +1,14 @@
+{
+  "status": "ok",
+  "model_version": "1.0.0-browser-lexical",
+  "model_type": "browser lexical + signals + rules",
+  "backbone": null,
+  "semantic_backend": "pyodide-lexical",
+  "semantic_error": null,
+  "thresholds": {
+    "spam_threshold": 0.924517,
+    "suspicious_threshold": 0.6372
+  },
+  "device": "browser",
+  "artifacts_dir": "browser"
+}

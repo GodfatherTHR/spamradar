@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Multilingual spam and social-engineering detection with calibrated risk tiers and explanations.">
+  <title>SpamRadar — Multilingual Spam & Scam Detection</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/styles.css?v=2">
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="SpamRadar home">
+      <span class="logo" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path d="M16 3.5 27 7.7v7.1c0 6.3-4.5 11.3-11 13.7-6.5-2.4-11-7.4-11-13.7V7.7L16 3.5Z" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M10.5 16.2 14.2 20l7.4-8" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="brand-text">
+        <strong>SpamRadar</strong>
+        <small>Multilingual spam &amp; scam detection</small>
+      </span>
+    </a>
+    <div class="top-actions">
+      <div class="status" id="statusPill" title="Model status">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Connecting</span>
+      </div>
+      <a class="ghost-link" href="/docs" target="_blank" rel="noopener">API docs</a>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">MASTER-CLASS DETECTOR</span>
+        <h2>Catch the scams that keywords miss.</h2>
+        <p>
+          Peer-to-peer payment traps, crypto doubling, fake bKash/Nagad alerts,
+          delivery OTP fraud, romance scams, fake marketplace deals, and obfuscated
+          links — across English, Bengali, Banglish, Hindi, Hinglish, Spanish,
+          French, Arabic, and mixed-script messages.
+        </p>
+        <div class="lang-chips" aria-label="Supported languages">
+          <span>English</span><span>বাংলা</span><span>Banglish</span><span>हिन्दी</span>
+          <span>Hinglish</span><span>Español</span><span>Français</span><span>العربية</span>
+          <span>Mixed script</span>
+        </div>
+      </div>
+      <div class="hero-metrics" id="heroMetrics">
+        <div class="metric">
+          <span id="metricRows">—</span>
+          <small>training messages</small>
+        </div>
+        <div class="metric">
+          <span id="metricLanguages">—</span>
+          <small>languages &amp; code-mixing</small>
+        </div>
+        <div class="metric">
+          <span id="metricLatency">—</span>
+          <small>typical model latency</small>
+        </div>
+      </div>
+    </section>
+
+    <nav class="tabs" role="tablist" aria-label="Views">
+      <button class="tab active" role="tab" aria-selected="true" aria-controls="tab-analyze" data-tab="analyze">Analyze</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-batch" data-tab="batch">Batch</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-model" data-tab="model">Model</button>
+    </nav>
+
+    <section class="tab-panel active" id="tab-analyze" role="tabpanel">
+      <div class="workspace">
+        <div class="card input-card">
+          <div class="card-head">
+            <div>
+              <h3>Message</h3>
+              <p class="muted">Paste an SMS, WhatsApp message, DM, email, or marketplace chat.</p>
+            </div>
+            <span class="counter" id="charCount">0 / 4000</span>
+          </div>
+          <textarea id="messageInput" maxlength="4000" spellcheck="true"
+            placeholder="Give me $5 bucks I will give you an RTX 3090..."></textarea>
+          <div class="sample-row" id="samples" aria-label="Example messages"></div>
+          <div class="actions">
+            <button id="analyzeBtn" class="primary" type="button">
+              <span class="btn-label">Analyze message</span>
+              <span class="keys"><kbd>Ctrl</kbd><kbd>Enter</kbd></span>
+            </button>
+            <button id="clearBtn" class="ghost" type="button">Clear</button>
+          </div>
+          <div class="recent" id="recent"></div>
+          <p class="privacy">Runs locally. Messages are not stored or sent anywhere.</p>
+        </div>
+
+        <div class="card result-card" id="resultCard" data-tier="idle">
+          <div id="emptyState" class="empty-state">
+            <div class="empty-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none">
+                <path d="M24 5 41 11v11c0 10-6.7 17.8-17 21.5C13.7 39.8 7 32 7 22V11L24 5Z" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M16 24.5 21.5 30 33 17.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3>Ready to inspect</h3>
+            <p>The detector combines lexical n-grams, a multilingual semantic encoder, and engineered scam signals — then calibrates the final probability.</p>
+          </div>
+
+          <div id="resultContent" class="result-content hidden" aria-live="polite">
+            <div class="result-top">
+              <div class="gauge" id="gauge" style="--value:0">
+                <div class="gauge-inner">
+                  <span id="probValue">0%</span>
+                  <small>spam probability</small>
+                </div>
+              </div>
+              <div class="verdict">
+                <div class="verdict-row">
+                  <span id="verdictLabel" class="verdict-label">NORMAL</span>
+                  <span id="riskBadge" class="risk-badge">low risk</span>
+                </div>
+                <p id="verdictSub" class="verdict-sub"></p>
+                <div class="meta-row">
+                  <span id="languageBadge" class="badge">English</span>
+                  <span id="latencyBadge" class="badge">0 ms</span>
+                  <span id="versionBadge" class="badge">v1.0.0</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="prob-track" aria-hidden="true">
+              <div id="probFill" class="prob-fill"></div>
+              <div id="suspiciousMarker" class="marker suspicious" title="Review threshold"></div>
+              <div id="spamMarker" class="marker spam" title="Block threshold"></div>
+            </div>
+            <div class="track-labels">
+              <span>Normal</span><span>Review</span><span>Spam</span>
+            </div>
+
+            <div class="score-grid" id="scoreGrid"></div>
+
+            <div class="section-head">
+              <h4>Detected signals</h4>
+              <span id="signalCount" class="hint"></span>
+            </div>
+            <div class="signals" id="signals"></div>
+
+            <div class="section-head">
+              <h4>Model cues</h4>
+              <span class="hint">Lexical features that pushed the score</span>
+            </div>
+            <div class="cues" id="cues"></div>
+            <div id="semanticMatch" class="semantic hidden"></div>
+            <div class="explanation" id="explanation"></div>
+            <div class="actions">
+              <button id="copyBtn" class="ghost" type="button">Copy JSON</button>
+              <button id="retryBtn" class="ghost" type="button">Try another</button>
+            </div>
+          </div>
+
+          <div id="errorState" class="error hidden" role="alert"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-batch" role="tabpanel">
+      <div class="card batch-card">
+        <div class="card-head">
+          <div>
+            <h3>Batch analysis</h3>
+            <p class="muted">One message per line, up to 256 messages.</p>
+          </div>
+          <span class="counter" id="batchCount">0 messages</span>
+        </div>
+        <textarea id="batchInput" spellcheck="false"
+          placeholder="Your parcel is held at customs. Pay a $2.99 fee here: bit[.]ly/track&#10;Bro can you send me $5 for lunch? I'll pay you back tomorrow.&#10;আপনি ৫,০০,০০০ টাকা জিতেছেন! পুরস্কার পেতে আপনার বিকাশ নম্বর পাঠান।"></textarea>
+        <div class="actions">
+          <button id="batchBtn" class="primary" type="button"><span class="btn-label">Analyze batch</span></button>
+          <button id="batchClear" class="ghost" type="button">Clear</button>
+        </div>
+        <div id="batchSummary" class="batch-summary hidden"></div>
+        <div class="table-wrap">
+          <table id="batchTable">
+            <thead>
+              <tr><th>#</th><th>Message</th><th>Label</th><th>P(spam)</th><th>Language</th><th>Top signal</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-model" role="tabpanel">
+      <div class="model-grid">
+        <div class="card">
+          <div class="card-head"><h3>Model card</h3><span id="modelBackend" class="badge">—</span></div>
+          <div id="modelDetails" class="details"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Evaluation</h3><span class="hint">held-out test</span></div>
+          <div id="metricGrid" class="metric-grid"></div>
+          <p id="evalNote" class="muted"></p>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Dataset</h3><span class="hint">deduped + leakage-safe</span></div>
+          <div id="datasetBars" class="dataset-bars"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>How it works</h3><span class="hint">3 signal layers</span></div>
+          <ol class="how-list">
+            <li><strong>Lexical + signals.</strong> Unicode-aware character and word n-grams learn obfuscated links, transliterated scams, and code-mixing. 100 engineered features add URL, payment, urgency, OTP, and formatting evidence.</li>
+            <li><strong>Multilingual semantics.</strong> A frozen MiniLM multilingual encoder catches paraphrases, cross-language scam scripts, and offers without obvious keywords. A calibrated linear head scores the embedding.</li>
+            <li><strong>Calibration.</strong> A validation-fit stacker blends both branches and the heuristic score, then a precision-constrained threshold produces NORMAL, SUSPICIOUS, or SPAM.</li>
+          </ol>
+          <p class="muted">The old English-only DeBERTa-v3-extra-small H5 baseline is intentionally not used for multilingual production.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>
+      <strong>SpamRadar</strong>
+      <span>Defensive spam filtering for multilingual messaging.</span>
+    </div>
+    <div class="footer-note">
+      A SPAM verdict is an automated signal, not proof. Review ambiguous messages before acting.
+    </div>
+  </footer>
+
+  <script src="/static/app.js?v=2"></script>
+</body>
+</html>

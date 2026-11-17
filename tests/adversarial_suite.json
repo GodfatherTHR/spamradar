@@ -1,0 +1,1202 @@
+[
+  {
+    "id": "en_p2p_rtx",
+    "text": "Give me $5 bucks I will give you an RTX 3090. Only one left, bro.",
+    "label": "spam",
+    "language": "English",
+    "category": "p2p_bait",
+    "why": "The canonical unrealistic exchange: a tiny payment for a high-value GPU."
+  },
+  {
+    "id": "en_p2p_double_cash",
+    "text": "Send me $20 today and I will send you $200 back tonight. Guaranteed.",
+    "label": "spam",
+    "language": "English",
+    "category": "p2p_bait",
+    "why": "Direct money-doubling bait with a small stake."
+  },
+  {
+    "id": "en_p2p_wrong_transfer",
+    "text": "I accidentally sent you $500 by mistake. Send me $50 back and keep the rest as a thank-you.",
+    "label": "spam",
+    "language": "English",
+    "category": "p2p_bait",
+    "why": "Fake mistaken-transfer scam asking the victim to return money."
+  },
+  {
+    "id": "en_market_ps5_zelle",
+    "text": "Selling a sealed PS5 for $150. Zelle only. Pay the deposit first and I will ship it today.",
+    "label": "spam",
+    "language": "English",
+    "category": "marketplace_scam",
+    "why": "Deposit-first marketplace scam using a payment app."
+  },
+  {
+    "id": "en_market_deployed_deposit",
+    "text": "I am deployed overseas, so I cannot meet. Send a $75 deposit via Cash App and I will ship the iPhone 16 Pro.",
+    "label": "spam",
+    "language": "English",
+    "category": "marketplace_scam",
+    "why": "Fake overseas seller asks for a deposit before shipping."
+  },
+  {
+    "id": "en_market_tickets_zelle",
+    "text": "Two concert tickets available. Zelle only. Pay $100 deposit now and I will transfer the tickets immediately.",
+    "label": "spam",
+    "language": "English",
+    "category": "marketplace_scam",
+    "why": "Concert-ticket deposit scam with a payment-app-only constraint."
+  },
+  {
+    "id": "en_crypto_btc_double",
+    "text": "Send 0.1 BTC to this wallet and receive 0.5 BTC back in 10 minutes. Guaranteed 500% profit.",
+    "label": "spam",
+    "language": "English",
+    "category": "crypto",
+    "why": "Classic crypto doubling promise."
+  },
+  {
+    "id": "en_crypto_airdrop",
+    "text": "You are eligible for a 1,000 USDT airdrop. Connect and verify your wallet at hxxps://claim-usdt.top before it expires.",
+    "label": "spam",
+    "language": "English",
+    "category": "crypto",
+    "why": "Fake airdrop that asks the user to connect or verify a wallet."
+  },
+  {
+    "id": "en_crypto_seed",
+    "text": "To restore your wallet, reply with your 12-word seed phrase and we will fix the sync issue for you.",
+    "label": "spam",
+    "language": "English",
+    "category": "crypto",
+    "why": "Seed-phrase theft: a real security rule violation."
+  },
+  {
+    "id": "en_crypto_forex",
+    "text": "Our AI forex bot earns 300% monthly with zero risk. Minimum deposit $100. Join the VIP Telegram group now.",
+    "label": "spam",
+    "language": "English",
+    "category": "loan_investment",
+    "why": "Guaranteed-return investment bait with a Telegram funnel."
+  },
+  {
+    "id": "en_bank_bkash",
+    "text": "URGENT: Your bKash account is suspended. Click http://bkash-verify.xyz to reactivate it within 24 hours.",
+    "label": "spam",
+    "language": "English",
+    "category": "bank_kyc",
+    "why": "Account-suspension phishing with a lookalike domain."
+  },
+  {
+    "id": "en_bank_nagad_kyc",
+    "text": "Nagad: Your KYC is pending and your account will be blocked today. Update your details at http://nagad-kyc-update.top",
+    "label": "spam",
+    "language": "English",
+    "category": "bank_kyc",
+    "why": "KYC phishing with a short deadline."
+  },
+  {
+    "id": "en_bank_paypal",
+    "text": "Your PayPal account has been limited. Verify your identity at https://paypal-secure-check.live to restore access.",
+    "label": "spam",
+    "language": "English",
+    "category": "bank_kyc",
+    "why": "PayPal limited-account phishing."
+  },
+  {
+    "id": "en_bank_sbi",
+    "text": "SBI Alert: Your account will be frozen. Download the verification app at http://sbi-kyc-apk.xyz and complete KYC now.",
+    "label": "spam",
+    "language": "English",
+    "category": "bank_kyc",
+    "why": "Bank account freeze phishing with an APK lure."
+  },
+  {
+    "id": "en_bank_chase",
+    "text": "Chase Fraud Alert: A $480 transfer was attempted. If this was not you, verify at http://chase-alert-center.click",
+    "label": "spam",
+    "language": "English",
+    "category": "bank_kyc",
+    "why": "Fraud-alert phishing using a bank brand and a suspicious domain."
+  },
+  {
+    "id": "en_kyc_obfuscated",
+    "text": "Your KYC is incomplete. Click bit[.]ly/kyc-update-now and submit your ID to avoid permanent suspension.",
+    "label": "spam",
+    "language": "English",
+    "category": "kyc_phishing",
+    "why": "Defanged link plus KYC language."
+  },
+  {
+    "id": "en_delivery_customs",
+    "text": "A package addressed to you is stuck at the customs desk. Settle the 3.50 USD release charge at hxxp://customs-release.top to get it moving.",
+    "label": "spam",
+    "language": "English",
+    "category": "delivery_otp",
+    "why": "Small customs fee for a parcel that does not exist."
+  },
+  {
+    "id": "en_delivery_otp",
+    "text": "Our courier is at your door. Reply with the 6-digit OTP you just received so we can complete the delivery.",
+    "label": "spam",
+    "language": "English",
+    "category": "delivery_otp",
+    "why": "OTP theft disguised as a courier request."
+  },
+  {
+    "id": "en_delivery_usps",
+    "text": "USPS: Your package could not be delivered because the address is incomplete. Pay $1.99 at http://usps-redelivery.top",
+    "label": "spam",
+    "language": "English",
+    "category": "delivery_otp",
+    "why": "USPS-themed redelivery fee phishing."
+  },
+  {
+    "id": "en_delivery_dhl",
+    "text": "DHL Express: Shipment AWB 7842 is on hold. Pay the $4.50 customs fee at http://dhl-fee-payment.xyz to release it.",
+    "label": "spam",
+    "language": "English",
+    "category": "delivery_otp",
+    "why": "DHL-themed shipment fee phishing."
+  },
+  {
+    "id": "en_job_whatsapp",
+    "text": "Work from home and earn $500 per day. No experience needed. WhatsApp us at +1 202-555-0199 to start today.",
+    "label": "spam",
+    "language": "English",
+    "category": "job",
+    "why": "Daily-payout work-from-home bait."
+  },
+  {
+    "id": "en_job_telegram",
+    "text": "Urgent hiring for data entry. Daily payout of $300. Join our Telegram now: https://t.me/quick-cash-jobs",
+    "label": "spam",
+    "language": "English",
+    "category": "job",
+    "why": "Telegram data-entry job with upfront onboarding."
+  },
+  {
+    "id": "en_job_amazon",
+    "text": "Amazon is hiring remote product testers. Keep the products and earn $2,000 per week. Apply at http://amazon-careers.top",
+    "label": "spam",
+    "language": "English",
+    "category": "job",
+    "why": "Brand impersonation in a fake work-from-home offer."
+  },
+  {
+    "id": "en_job_hotel_fee",
+    "text": "You are selected for a hotel receptionist job in Dubai. Pay a $95 visa processing fee to confirm your slot.",
+    "label": "spam",
+    "language": "English",
+    "category": "job",
+    "why": "Employment scam that asks for a registration fee."
+  },
+  {
+    "id": "en_romance_soldier",
+    "text": "My dear, I am a US soldier on a peacekeeping mission. I need $1,200 for a visa to finally meet you. Please send it via Zelle.",
+    "label": "spam",
+    "language": "English",
+    "category": "romance",
+    "why": "Classic romance scam with a visa emergency."
+  },
+  {
+    "id": "en_romance_doctor",
+    "text": "I feel a deep connection with you. Can you help me with $800 for my mother's hospital bill? I will repay you when I arrive.",
+    "label": "spam",
+    "language": "English",
+    "category": "romance",
+    "why": "Romance scam with a hospital emergency."
+  },
+  {
+    "id": "en_romance_ticket",
+    "text": "I bought a ticket to visit you, but customs is asking for a $250 clearance fee. Please pay it so I can finally see you.",
+    "label": "spam",
+    "language": "English",
+    "category": "romance",
+    "why": "Romance scam with a ticket and customs-fee story."
+  },
+  {
+    "id": "en_loan_preapproved",
+    "text": "Pre-approved loan of $5,000 at 0% interest. No documents, no credit check. Apply here: http://instant-loan.top",
+    "label": "spam",
+    "language": "English",
+    "category": "loan_investment",
+    "why": "Zero-interest loan bait with no documents."
+  },
+  {
+    "id": "en_invest_double",
+    "text": "Double your money in 24 hours. Minimum investment $50, guaranteed returns. Limited slots. Contact me on WhatsApp.",
+    "label": "spam",
+    "language": "English",
+    "category": "loan_investment",
+    "why": "Guaranteed daily returns with a small minimum."
+  },
+  {
+    "id": "en_tech_microsoft",
+    "text": "Microsoft Security Alert: Your device is infected with 5 viruses. Call +1 202-555-0199 immediately and allow remote access.",
+    "label": "spam",
+    "language": "English",
+    "category": "tech_support",
+    "why": "Tech-support scam with remote access."
+  },
+  {
+    "id": "en_tech_apple",
+    "text": "Your Apple ID has been locked for security reasons. Call +1 202-555-0199 and read the verification code to unlock it.",
+    "label": "spam",
+    "language": "English",
+    "category": "tech_support",
+    "why": "Apple ID lock phishing."
+  },
+  {
+    "id": "en_lottery_500k",
+    "text": "Congratulations! Your mobile number won $500,000 in the international lottery. Pay a $250 processing fee to claim.",
+    "label": "spam",
+    "language": "English",
+    "category": "lottery_prize",
+    "why": "International lottery prize with a processing fee."
+  },
+  {
+    "id": "en_lottery_prize",
+    "text": "You are today's lucky winner of an iPhone 16 Pro. Claim within 24 hours at http://lucky-winner.top before it expires.",
+    "label": "spam",
+    "language": "English",
+    "category": "lottery_prize",
+    "why": "Prize bait with an urgent claim link."
+  },
+  {
+    "id": "en_promo_iphone",
+    "text": "FREE iPhone 16 Pro! You were selected as today's lucky visitor. Click http://free-iphone-claim.xyz to claim yours now.",
+    "label": "spam",
+    "language": "English",
+    "category": "promo",
+    "why": "Free iPhone promotional blast."
+  },
+  {
+    "id": "en_promo_giftcard",
+    "text": "You have a $500 Amazon gift card waiting. Send us the gift card code and we will activate it for you.",
+    "label": "spam",
+    "language": "English",
+    "category": "promo",
+    "why": "Gift-card cash-out scheme."
+  },
+  {
+    "id": "en_otp_send",
+    "text": "Send me the OTP you just received. I need it to verify your account and release your payment.",
+    "label": "spam",
+    "language": "English",
+    "category": "otp_theft",
+    "why": "Direct OTP request without a legitimate context."
+  },
+  {
+    "id": "en_otp_batao",
+    "text": "Bro OTP batao quickly, bank se call aaya hai. Code share karo, account block ho jayega.",
+    "label": "spam",
+    "language": "English",
+    "category": "otp_theft",
+    "why": "Code-switched request for a verification code."
+  },
+  {
+    "id": "en_account_ip",
+    "text": "Unauthorized login detected. Verify your account at http://192.168.1.44/login to avoid suspension.",
+    "label": "spam",
+    "language": "English",
+    "category": "bank_kyc",
+    "why": "IP-address login page, a clear phishing indicator."
+  },
+  {
+    "id": "en_obf_bitly",
+    "text": "Your refund is ready. Claim it at bit[.]ly/refund-92831 before it expires tonight.",
+    "label": "spam",
+    "language": "English",
+    "category": "obfuscated_url",
+    "why": "Defanged short link hiding the destination."
+  },
+  {
+    "id": "en_obf_walmart",
+    "text": "Your Walmart gift card is ready: w.a.l.m.a.r.t/claim-gift. Verify your details to receive it.",
+    "label": "spam",
+    "language": "English",
+    "category": "obfuscated_url",
+    "why": "Spaced-out brand domain used to evade filters."
+  },
+  {
+    "id": "en_obf_paypa1",
+    "text": "Security alert: verify your PayPal account at hxxps://paypa1-secure.top/login immediately.",
+    "label": "spam",
+    "language": "English",
+    "category": "obfuscated_url",
+    "why": "Leetspeak typosquat plus hxxp scheme."
+  },
+  {
+    "id": "en_typo_amazon",
+    "text": "Amazon: Your order is on hold. Confirm your payment at https://amaz0n-support.top/verify to avoid cancellation.",
+    "label": "spam",
+    "language": "English",
+    "category": "obfuscated_url",
+    "why": "Typosquatted Amazon domain."
+  },
+  {
+    "id": "en_emoji_prize",
+    "text": "You won a free iPhone! Click http://gift-claim.xyz now to claim your prize before midnight.",
+    "label": "spam",
+    "language": "English",
+    "category": "promo",
+    "why": "Emoji-heavy prize blast."
+  },
+  {
+    "id": "mixed_bn_en_bank",
+    "text": "URGENT: আপনার account suspend হয়েছে. এখনই KYC update করুন: http://bkash-verify.xyz",
+    "label": "spam",
+    "language": "mixed",
+    "category": "bank_kyc",
+    "why": "Bengali-English code-mixed account suspension."
+  },
+  {
+    "id": "mixed_hi_en_otp",
+    "text": "Aapka OTP 482913 है. Send it to our agent to complete verification, warna account block ho jayega.",
+    "label": "spam",
+    "language": "mixed",
+    "category": "otp_theft",
+    "why": "Hindi-English code-mixed OTP request."
+  },
+  {
+    "id": "mixed_ar_en_bank",
+    "text": "عاجل: Your bank account is suspended. تحقق الآن: http://bank-verify.xyz",
+    "label": "spam",
+    "language": "mixed",
+    "category": "bank_kyc",
+    "why": "Arabic-English account threat with a phishing link."
+  },
+  {
+    "id": "mixed_es_en_delivery",
+    "text": "Su paquete está retenido. Pay $2.99 here: http://track-parcel.xyz to release it today.",
+    "label": "spam",
+    "language": "mixed",
+    "category": "delivery_otp",
+    "why": "Spanish-English delivery fee phishing."
+  },
+  {
+    "id": "bn_lottery",
+    "text": "অভিনন্দন! আপনি ৫,০০,০০০ টাকা জিতেছেন। পুরস্কার পেতে আপনার বিকাশ নম্বর পাঠান এবং ৫০০ টাকা প্রসেসিং ফি দিন।",
+    "label": "spam",
+    "language": "Bengali",
+    "category": "lottery_prize",
+    "why": "Bengali lottery scam asking for a bKash number."
+  },
+  {
+    "id": "bn_bkash_kyc",
+    "text": "জরুরি: আপনার বিকাশ অ্যাকাউন্ট সাসপেন্ড করা হয়েছে। এখনই এই লিঙ্কে KYC আপডেট করুন: http://bkash-verify.xyz",
+    "label": "spam",
+    "language": "Bengali",
+    "category": "bank_kyc",
+    "why": "Bengali bKash suspension and KYC phishing."
+  },
+  {
+    "id": "bn_delivery_otp",
+    "text": "আপনার পার্সেল কাস্টমসে আটকে আছে। ডেলিভারি সম্পন্ন করতে কুরিয়ারকে আপনার OTP দিন। কোড: ৪৮২৯১৩।",
+    "label": "spam",
+    "language": "Bengali",
+    "category": "delivery_otp",
+    "why": "Bengali courier OTP request."
+  },
+  {
+    "id": "bn_p2p",
+    "text": "ভাই, আমাকে ৫০০ টাকা পাঠাও, আমি তোমাকে ৫০,০০০ টাকা ফেরত দেব। মাত্র একটি সুযোগ।",
+    "label": "spam",
+    "language": "Bengali",
+    "category": "p2p_bait",
+    "why": "Bengali money-multiplying bait."
+  },
+  {
+    "id": "bn_job",
+    "text": "ঘরে বসে প্রতিদিন ২,০০০ টাকা আয় করুন। কোনো অভিজ্ঞতা লাগবে না। WhatsApp করুন: +8801712345678।",
+    "label": "spam",
+    "language": "Bengali",
+    "category": "job",
+    "why": "Bengali daily-payout work-from-home scam."
+  },
+  {
+    "id": "bn_romance",
+    "text": "প্রিয়, আমি বিদেশে সেনাবাহিনীতে আছি। তোমার সাথে দেখা করতে ২০,০০০ টাকা দরকার। বিকাশে পাঠাও।",
+    "label": "spam",
+    "language": "Bengali",
+    "category": "romance",
+    "why": "Bengali romance scam with a visa emergency."
+  },
+  {
+    "id": "banglish_p2p",
+    "text": "Bhai 500 taka bhej, ami tomake 50,000 taka ferot debo. Guarantee diyechi.",
+    "label": "spam",
+    "language": "Banglish",
+    "category": "p2p_bait",
+    "why": "Romanized Bengali P2P doubling bait."
+  },
+  {
+    "id": "banglish_kyc",
+    "text": "Apnar bKash account suspend hoyeche. Ekhoni KYC update korun: http://bkash-verify.xyz",
+    "label": "spam",
+    "language": "Banglish",
+    "category": "bank_kyc",
+    "why": "Romanized Bengali KYC phishing."
+  },
+  {
+    "id": "banglish_delivery",
+    "text": "Apnar parcel customs e atke ache. 500 taka clearance fee din: http://track-parcel.xyz",
+    "label": "spam",
+    "language": "Banglish",
+    "category": "delivery_otp",
+    "why": "Romanized Bengali delivery fee phishing."
+  },
+  {
+    "id": "banglish_job",
+    "text": "Ghore boshe protidin 2,000 taka income korun. Experience lagbe na. WhatsApp korun: +8801712345678",
+    "label": "spam",
+    "language": "Banglish",
+    "category": "job",
+    "why": "Romanized Bengali work-from-home bait."
+  },
+  {
+    "id": "hi_lottery",
+    "text": "बधाई हो! आपका नंबर ₹5,00,000 का इनाम जीता है। पुरस्कार पाने के लिए ₹500 प्रोसेसिंग फीस भेजें और अपना Paytm नंबर दें।",
+    "label": "spam",
+    "language": "Hindi",
+    "category": "lottery_prize",
+    "why": "Hindi lottery scam with a processing fee."
+  },
+  {
+    "id": "hi_kyc",
+    "text": "जरूरी: आपका SBI अकाउंट सस्पेंड हो गया है। तुरंत KYC अपडेट करें: http://sbi-kyc.xyz",
+    "label": "spam",
+    "language": "Hindi",
+    "category": "bank_kyc",
+    "why": "Hindi SBI KYC phishing."
+  },
+  {
+    "id": "hi_delivery",
+    "text": "आपका पार्सल कस्टम्स में रुका है। ₹200 क्लीयरेंस फीस भेजें: http://track-parcel.xyz",
+    "label": "spam",
+    "language": "Hindi",
+    "category": "delivery_otp",
+    "why": "Hindi customs-fee delivery scam."
+  },
+  {
+    "id": "hi_p2p",
+    "text": "भाई, मुझे ₹500 भेज दे, मैं तुझे ₹50,000 वापस दूंगा। सिर्फ एक मौका है।",
+    "label": "spam",
+    "language": "Hindi",
+    "category": "p2p_bait",
+    "why": "Hindi money-multiplying bait."
+  },
+  {
+    "id": "hinglish_p2p",
+    "text": "Bhai mujhe 500 bhej de, main tujhe 50,000 wapas dunga. Trust me, ek hi chance hai.",
+    "label": "spam",
+    "language": "Hinglish",
+    "category": "p2p_bait",
+    "why": "Hinglish unrealistic exchange."
+  },
+  {
+    "id": "hinglish_kyc",
+    "text": "Aapka KYC pending hai. Turant is link par click karke update karein: bit[.]ly/kyc-update, warna account block ho jayega.",
+    "label": "spam",
+    "language": "Hinglish",
+    "category": "bank_kyc",
+    "why": "Hinglish KYC phishing with a short link."
+  },
+  {
+    "id": "hinglish_otp",
+    "text": "Aapka OTP 482913 hai. Isse hamare agent ko bhej do, verification complete karna hai.",
+    "label": "spam",
+    "language": "Hinglish",
+    "category": "otp_theft",
+    "why": "Hinglish OTP request."
+  },
+  {
+    "id": "es_bank",
+    "text": "BBVA: Su cuenta ha sido bloqueada por actividad sospechosa. Verifique su identidad ahora: http://bbva-seguro.xyz",
+    "label": "spam",
+    "language": "Spanish",
+    "category": "bank_kyc",
+    "why": "Spanish bank suspension phishing."
+  },
+  {
+    "id": "es_p2p",
+    "text": "Envíame $5 y te daré una RTX 3090 nueva. Solo queda una, amigo.",
+    "label": "spam",
+    "language": "Spanish",
+    "category": "p2p_bait",
+    "why": "Spanish money-doubling bait."
+  },
+  {
+    "id": "es_delivery",
+    "text": "Su envío quedó retenido en la aduana. Cubra la tasa de 3,50 USD en http://aduana-pago.top para liberarlo.",
+    "label": "spam",
+    "language": "Spanish",
+    "category": "delivery_otp",
+    "why": "Spanish delivery fee phishing."
+  },
+  {
+    "id": "fr_bank",
+    "text": "Votre compte est suspendu pour activité suspecte. Vérifiez votre KYC immédiatement : http://paypal-verification.top",
+    "label": "spam",
+    "language": "French",
+    "category": "bank_kyc",
+    "why": "French bank suspension phishing."
+  },
+  {
+    "id": "fr_p2p",
+    "text": "Envoie-moi 5 € et je te donne une RTX 3090 neuve. Il n'en reste qu'une, mon ami.",
+    "label": "spam",
+    "language": "French",
+    "category": "p2p_bait",
+    "why": "French money-doubling bait."
+  },
+  {
+    "id": "fr_delivery",
+    "text": "Un colis à votre nom est bloqué au dédouanement. Réglez 3,50 € sur http://douane-paiement.top pour le libérer.",
+    "label": "spam",
+    "language": "French",
+    "category": "delivery_otp",
+    "why": "French customs-fee delivery scam."
+  },
+  {
+    "id": "ar_bank",
+    "text": "عاجل: تم تعليق حسابك البنكي بسبب نشاط مشبوه. تحقق من بياناتك الآن: http://bank-verify.xyz",
+    "label": "spam",
+    "language": "Arabic",
+    "category": "bank_kyc",
+    "why": "Arabic bank suspension phishing."
+  },
+  {
+    "id": "ar_p2p",
+    "text": "أرسل لي 5 دولارات وسأعطيك RTX 3090 جديداً. بقي واحد فقط يا صديقي.",
+    "label": "spam",
+    "language": "Arabic",
+    "category": "p2p_bait",
+    "why": "Arabic money-doubling bait."
+  },
+  {
+    "id": "ar_delivery",
+    "text": "شحنتك محتجزة في الجمارك. ادفع 10 ريالات رسوم تخليص هنا: http://track-parcel.xyz",
+    "label": "spam",
+    "language": "Arabic",
+    "category": "delivery_otp",
+    "why": "Arabic delivery fee phishing."
+  },
+  {
+    "id": "ham_lunch_5",
+    "text": "Bro can you send me $5 for lunch? I will pay you back tomorrow.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_personal",
+    "why": "Normal friend-to-friend money request with repayment."
+  },
+  {
+    "id": "ham_rent_500",
+    "text": "Hey, can you lend me $500 for rent? I will return it next week after my salary.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_personal",
+    "why": "Normal borrowing request with no unrealistic reward."
+  },
+  {
+    "id": "ham_mom_hospital",
+    "text": "Mom is in the hospital. Call me as soon as you see this. Nothing to pay, we just need you here.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_urgent",
+    "why": "Urgent family message that contains a hospital mention."
+  },
+  {
+    "id": "ham_meeting",
+    "text": "Team sync has been shifted to 2:30 PM in Conference Room B. Please skim the slides before we begin.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_work",
+    "why": "Ordinary work coordination."
+  },
+  {
+    "id": "ham_birthday",
+    "text": "Happy birthday! Hope you have an amazing day with your family.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_personal",
+    "why": "Normal personal greeting with an emoji."
+  },
+  {
+    "id": "ham_charger",
+    "text": "I left my charger at your place. Can I grab it tomorrow afternoon?",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_personal",
+    "why": "Normal personal logistics."
+  },
+  {
+    "id": "ham_movie",
+    "text": "Are you free this weekend to watch the new movie? I can book the tickets.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_personal",
+    "why": "Normal social plan."
+  },
+  {
+    "id": "ham_split_bill",
+    "text": "Split the bill? Your share is $14. I will send a request on Venmo.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_money",
+    "why": "Bill splitting with a payment app but no scam pattern."
+  },
+  {
+    "id": "ham_mistake_50",
+    "text": "I sent you $50 by mistake. Can you send it back when you get a chance? No rush.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_money",
+    "why": "A genuine mistaken transfer, textually close to the scam variant."
+  },
+  {
+    "id": "ham_salary",
+    "text": "Your salary of $2,450 has been credited to your account ending 4421. Thank you.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_bank",
+    "why": "Legitimate salary credit notification."
+  },
+  {
+    "id": "ham_bank_debit",
+    "text": "Your account was debited by $50.00 at Walmart. Available balance is $1,250.00.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_bank",
+    "why": "Legitimate debit alert with no link or threat."
+  },
+  {
+    "id": "ham_login_alert",
+    "text": "We noticed a sign-in from a new browser. If that was you, you can ignore this. Security settings: https://www.chase.com/security",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_bank",
+    "why": "A real security notification that explicitly says no action is needed."
+  },
+  {
+    "id": "ham_bank_statement",
+    "text": "Your monthly account statement is ready. View it securely at https://www.icicibank.com/statements.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_bank",
+    "why": "Legitimate statement notification with a known domain."
+  },
+  {
+    "id": "ham_otp_private",
+    "text": "Your OTP is 482913. Do not share it with anyone. It expires in 10 minutes.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_otp",
+    "why": "Legitimate OTP notification with the correct anti-phishing warning."
+  },
+  {
+    "id": "ham_otp_never",
+    "text": "We will never ask for your OTP, PIN, or password. Never share these codes with anyone.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_otp",
+    "why": "Security reminder with no link or payment request."
+  },
+  {
+    "id": "ham_delivery_agent",
+    "text": "The delivery agent will ask for a 4-digit OTP at your door. Please share it only after the package arrives.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_otp",
+    "why": "Legitimate delivery OTP flow: share the code only with the agent at the door."
+  },
+  {
+    "id": "ham_delivery_out",
+    "text": "The courier has your parcel and it should reach you today. Live tracking: https://track.dhl.com/ZX-9981.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_delivery",
+    "why": "Normal delivery update with a legitimate tracking domain."
+  },
+  {
+    "id": "ham_delivery_reschedule",
+    "text": "Delivery attempt failed. Reschedule at https://www.fedex.com/reschedule. Your package will be held for 3 days.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_delivery",
+    "why": "Normal failed-delivery reschedule notice."
+  },
+  {
+    "id": "ham_delivery_pickup",
+    "text": "Your package is ready for pickup at the local post office. Bring your ID and the tracking number.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_delivery",
+    "why": "Legitimate pickup instruction with no fee."
+  },
+  {
+    "id": "ham_work_proposal",
+    "text": "Can you review the attached proposal and send comments by Friday? The client is waiting.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_work",
+    "why": "Normal work request with a deadline."
+  },
+  {
+    "id": "ham_work_invoice",
+    "text": "I attached the invoice for last month. Please process it when you get a chance.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_work",
+    "why": "Normal invoice discussion with no suspicious link."
+  },
+  {
+    "id": "ham_work_interview",
+    "text": "We would like to invite you for an interview on Tuesday at 10 AM. Please confirm your availability.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_work",
+    "why": "Legitimate interview invitation."
+  },
+  {
+    "id": "ham_market_sell",
+    "text": "I am selling my PS5 for $400. Pickup only, no shipping. DM me if you are interested.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_marketplace",
+    "why": "Legitimate local sale with pickup only."
+  },
+  {
+    "id": "ham_market_available",
+    "text": "Is the iPhone still available? I can meet at the station at 6 PM and pay cash.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_marketplace",
+    "why": "Normal marketplace negotiation."
+  },
+  {
+    "id": "ham_market_paid",
+    "text": "I already paid $80 for your concert ticket. Can you transfer your share of the dinner bill instead?",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_marketplace",
+    "why": "Normal ticket payment between friends."
+  },
+  {
+    "id": "ham_order_shipped",
+    "text": "Good news, your Amazon parcel is on the way. See the delivery status at https://www.amazon.com/orders.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_promo",
+    "why": "Legitimate order shipment notification."
+  },
+  {
+    "id": "ham_coupon",
+    "text": "Thanks for subscribing. Here is your 10% coupon code WELCOME10 for your next purchase.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_promo",
+    "why": "Opt-in coupon with no urgency or payment request."
+  },
+  {
+    "id": "ham_food_order",
+    "text": "Order confirmed. Your meal is being prepared and should arrive within half an hour.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_promo",
+    "why": "Normal food delivery confirmation."
+  },
+  {
+    "id": "ham_appointment",
+    "text": "Your appointment is confirmed for 3 PM tomorrow. Reply CANCEL if you need to reschedule.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_promo",
+    "why": "Normal appointment confirmation."
+  },
+  {
+    "id": "ham_contract_deadline",
+    "text": "Please send the signed contract by 5 PM today. The client is waiting for it.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_urgent",
+    "why": "Urgent but legitimate business request."
+  },
+  {
+    "id": "ham_water_leak",
+    "text": "The kitchen sink is leaking badly. Please come back as soon as you can.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_urgent",
+    "why": "Urgent home emergency with no money request."
+  },
+  {
+    "id": "ham_kyc_branch",
+    "text": "Please complete your KYC at the bank branch by Friday. Bring your ID and address proof.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_bank",
+    "why": "Legitimate in-branch KYC request."
+  },
+  {
+    "id": "ham_kyc_complete",
+    "text": "Your KYC verification is complete. No further action is needed.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_bank",
+    "why": "Legitimate KYC completion message."
+  },
+  {
+    "id": "ham_link_meeting",
+    "text": "Here is the link to the meeting: https://meet.google.com/abc-defg-hij",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_link",
+    "why": "Ordinary meeting link with a known domain."
+  },
+  {
+    "id": "ham_link_webinar",
+    "text": "Our webinar starts at 6 PM. The Zoom room is https://zoom.us/j/987654321.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_link",
+    "why": "Ordinary webinar link."
+  },
+  {
+    "id": "ham_link_photos",
+    "text": "I shared the photos from the trip here: https://photos.app.goo.gl/abc123",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_link",
+    "why": "Normal photo-sharing link."
+  },
+  {
+    "id": "ham_office_raffle",
+    "text": "Congratulations to our team for winning the hackathon! Celebration at 6 PM in the cafeteria.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_prize",
+    "why": "Prize language in a harmless office context."
+  },
+  {
+    "id": "ham_office_gift",
+    "text": "You won the office raffle! Come pick up your gift card from reception whenever you are free.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_prize",
+    "why": "Legitimate office raffle prize with no fee or link."
+  },
+  {
+    "id": "ham_card_blocked",
+    "text": "The bank blocked my card after the suspicious charge. I will call them tomorrow and sort it out.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_bank",
+    "why": "A card-blocked message with no link or payment request."
+  },
+  {
+    "id": "ham_utility_bill",
+    "text": "Your electricity bill is due on Friday. You can pay it through the official app or at the counter.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_bank",
+    "why": "Normal utility bill reminder with an official channel."
+  },
+  {
+    "id": "ham_tax_refund",
+    "text": "The tax office says my refund is approved and will arrive in 5 business days. I will check the portal tomorrow.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_bank",
+    "why": "Tax refund status mention without a suspicious link."
+  },
+  {
+    "id": "ham_insurance",
+    "text": "Your car insurance renewal is due next month. Reply if you want me to send the updated quote.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_bank",
+    "why": "Normal insurance renewal reminder."
+  },
+  {
+    "id": "ham_emoji_birthday",
+    "text": "Happy birthday! Hope you have a wonderful day with your family and friends.",
+    "label": "ham",
+    "language": "English",
+    "category": "hard_negative_personal",
+    "why": "Personal message with an emoji and no scam intent."
+  },
+  {
+    "id": "bn_dinner",
+    "text": "আজ রাতে খাবি? আমি বাসায় ফিরছি সন্ধ্যায়।",
+    "label": "ham",
+    "language": "Bengali",
+    "category": "hard_negative_personal",
+    "why": "Normal Bengali dinner plan."
+  },
+  {
+    "id": "bn_meeting",
+    "text": "মিটিং সকাল ১০টায় রুম ৩০২-এ হবে। প্রস্তুতি নিয়ে আসবেন।",
+    "label": "ham",
+    "language": "Bengali",
+    "category": "hard_negative_work",
+    "why": "Normal Bengali meeting reminder."
+  },
+  {
+    "id": "bn_otp",
+    "text": "আপনার OTP ৪৮২৯১৩। এটি কারও সাথে শেয়ার করবেন না। ১০ মিনিটে মেয়াদ শেষ হবে।",
+    "label": "ham",
+    "language": "Bengali",
+    "category": "hard_negative_otp",
+    "why": "Legitimate Bengali OTP notification."
+  },
+  {
+    "id": "bn_bank_debit",
+    "text": "আপনার অ্যাকাউন্ট থেকে ৫০০ টাকা ডেবিট হয়েছে। বর্তমান ব্যালেন্স ১২,৫০০ টাকা।",
+    "label": "ham",
+    "language": "Bengali",
+    "category": "hard_negative_bank",
+    "why": "Normal Bengali debit alert."
+  },
+  {
+    "id": "bn_delivery",
+    "text": "আপনার পার্সেল আজ পৌঁছে যাবে। লাইভ ট্র্যাকিং: https://www.daraz.com.bd/tracking",
+    "label": "ham",
+    "language": "Bengali",
+    "category": "hard_negative_delivery",
+    "why": "Normal Bengali delivery update with a legitimate domain."
+  },
+  {
+    "id": "bn_money_sent",
+    "text": "আমি তোমাকে ৫০০ টাকা পাঠিয়ে দিয়েছি। ব্যাংক চেক করে নিও।",
+    "label": "ham",
+    "language": "Bengali",
+    "category": "hard_negative_money",
+    "why": "Normal Bengali money transfer notice."
+  },
+  {
+    "id": "banglish_chat",
+    "text": "Tumi kemon acho? Aj shondhaye dekha hobe?",
+    "label": "ham",
+    "language": "Banglish",
+    "category": "hard_negative_personal",
+    "why": "Normal Romanized Bengali chat."
+  },
+  {
+    "id": "banglish_otp",
+    "text": "Apnar OTP 482913. Eta karor sathe share korben na.",
+    "label": "ham",
+    "language": "Banglish",
+    "category": "hard_negative_otp",
+    "why": "Legitimate Romanized Bengali OTP warning."
+  },
+  {
+    "id": "banglish_bank",
+    "text": "Apnar account theke 500 taka debit hoyeche. Current balance 12,500 taka.",
+    "label": "ham",
+    "language": "Banglish",
+    "category": "hard_negative_bank",
+    "why": "Normal Romanized Bengali bank alert."
+  },
+  {
+    "id": "banglish_money",
+    "text": "Ami tomake 500 taka pathiye diyechi. Bank check koro.",
+    "label": "ham",
+    "language": "Banglish",
+    "category": "hard_negative_money",
+    "why": "Normal Romanized Bengali money transfer."
+  },
+  {
+    "id": "hi_meeting",
+    "text": "मीटिंग सुबह 10 बजे रूम 302 में है। कृपया समय पर आएं।",
+    "label": "ham",
+    "language": "Hindi",
+    "category": "hard_negative_work",
+    "why": "Normal Hindi meeting reminder."
+  },
+  {
+    "id": "hi_otp",
+    "text": "आपका सत्यापन कोड 739201 है। इसे किसी के साथ साझा न करें।",
+    "label": "ham",
+    "language": "Hindi",
+    "category": "hard_negative_otp",
+    "why": "Legitimate Hindi OTP notification."
+  },
+  {
+    "id": "hi_bank_debit",
+    "text": "आपके खाते से ₹500 डेबिट हुए हैं। उपलब्ध बैलेंस ₹12,500 है।",
+    "label": "ham",
+    "language": "Hindi",
+    "category": "hard_negative_bank",
+    "why": "Normal Hindi debit alert."
+  },
+  {
+    "id": "hi_lunch",
+    "text": "दोपहर में खाना खाएगा? मैं तुम्हारे ऑफिस के पास आ रहा हूं।",
+    "label": "ham",
+    "language": "Hindi",
+    "category": "hard_negative_personal",
+    "why": "Normal Hindi lunch plan."
+  },
+  {
+    "id": "hinglish_chat",
+    "text": "Yaar kal milte hai? Bohot time ho gaya baat kiye.",
+    "label": "ham",
+    "language": "Hinglish",
+    "category": "hard_negative_personal",
+    "why": "Normal Hinglish chat."
+  },
+  {
+    "id": "hinglish_otp_ham",
+    "text": "Aapka verification code 739201 hai. Kisi ko bhi mat batana.",
+    "label": "ham",
+    "language": "Hinglish",
+    "category": "hard_negative_otp",
+    "why": "Legitimate Hinglish OTP warning."
+  },
+  {
+    "id": "hinglish_bank",
+    "text": "Aapke account se ₹500 debit hue hain. Available balance ₹12,500 hai.",
+    "label": "ham",
+    "language": "Hinglish",
+    "category": "hard_negative_bank",
+    "why": "Normal Hinglish bank alert."
+  },
+  {
+    "id": "hinglish_money",
+    "text": "Maine tumhe ₹500 bhej diye hain. Bank check kar lo.",
+    "label": "ham",
+    "language": "Hinglish",
+    "category": "hard_negative_money",
+    "why": "Normal Hinglish money transfer."
+  },
+  {
+    "id": "es_lunch",
+    "text": "¿Me prestas $5 para el almuerzo? Te lo devuelvo mañana.",
+    "label": "ham",
+    "language": "Spanish",
+    "category": "hard_negative_personal",
+    "why": "Normal Spanish lunch loan."
+  },
+  {
+    "id": "es_bank_debit",
+    "text": "Su cuenta fue debitada por $50.00 en Walmart. Saldo disponible: $1,250.00.",
+    "label": "ham",
+    "language": "Spanish",
+    "category": "hard_negative_bank",
+    "why": "Normal Spanish debit alert."
+  },
+  {
+    "id": "es_otp",
+    "text": "Su código OTP es 482913. No lo comparta con nadie.",
+    "label": "ham",
+    "language": "Spanish",
+    "category": "hard_negative_otp",
+    "why": "Legitimate Spanish OTP warning."
+  },
+  {
+    "id": "es_delivery_ok",
+    "text": "El paquete sale para entrega hoy. Seguimiento: https://track.dhl.com/ZX-9981.",
+    "label": "ham",
+    "language": "Spanish",
+    "category": "hard_negative_delivery",
+    "why": "Normal Spanish delivery update."
+  },
+  {
+    "id": "fr_lunch",
+    "text": "Tu peux me prêter 5 € pour le déjeuner ? Je te rembourse demain.",
+    "label": "ham",
+    "language": "French",
+    "category": "hard_negative_personal",
+    "why": "Normal French lunch loan."
+  },
+  {
+    "id": "fr_bank_debit",
+    "text": "Votre compte a été débité de 50 € chez Walmart. Solde disponible : 1 250 €.",
+    "label": "ham",
+    "language": "French",
+    "category": "hard_negative_bank",
+    "why": "Normal French debit alert."
+  },
+  {
+    "id": "fr_otp",
+    "text": "Votre code OTP est 482913. Ne le partagez avec personne.",
+    "label": "ham",
+    "language": "French",
+    "category": "hard_negative_otp",
+    "why": "Legitimate French OTP warning."
+  },
+  {
+    "id": "fr_delivery_ok",
+    "text": "Le colis est sorti pour livraison aujourd'hui. Suivi : https://track.dhl.com/ZX-9981.",
+    "label": "ham",
+    "language": "French",
+    "category": "hard_negative_delivery",
+    "why": "Normal French delivery update."
+  },
+  {
+    "id": "ar_family",
+    "text": "أمي في المستشفى. اتصل بي فور رؤية هذه الرسالة.",
+    "label": "ham",
+    "language": "Arabic",
+    "category": "hard_negative_personal",
+    "why": "Normal Arabic family emergency."
+  },
+  {
+    "id": "ar_bank_debit",
+    "text": "تم خصم 50 دولاراً من حسابك في وول مارت. الرصيد المتاح 1,250 دولاراً.",
+    "label": "ham",
+    "language": "Arabic",
+    "category": "hard_negative_bank",
+    "why": "Normal Arabic debit alert."
+  },
+  {
+    "id": "ar_otp",
+    "text": "رمز OTP الخاص بك هو 482913. لا تشاركه مع أي شخص.",
+    "label": "ham",
+    "language": "Arabic",
+    "category": "hard_negative_otp",
+    "why": "Legitimate Arabic OTP warning."
+  },
+  {
+    "id": "ar_delivery_ok",
+    "text": "الشحنة خرجت للتوصيل اليوم. التتبع: https://track.dhl.com/ZX-9981.",
+    "label": "ham",
+    "language": "Arabic",
+    "category": "hard_negative_delivery",
+    "why": "Normal Arabic delivery update."
+  },
+  {
+    "id": "mixed_bn_en_normal",
+    "text": "Hope তোমার জীবন becomes সমৃদ্ধ! আজ dinner একসাথে করি?",
+    "label": "ham",
+    "language": "mixed",
+    "category": "hard_negative_personal",
+    "why": "Normal Bengali-English code-mixed personal message."
+  },
+  {
+    "id": "mixed_hi_en_normal",
+    "text": "Team meeting kal 10 AM par hai. Please notes ready rakhna.",
+    "label": "ham",
+    "language": "mixed",
+    "category": "hard_negative_work",
+    "why": "Normal Hindi-English code-mixed work message."
+  },
+  {
+    "id": "mixed_ar_en_normal",
+    "text": "رابط الاجتماع هنا: https://meet.google.com/xyz-abcd-efg",
+    "label": "ham",
+    "language": "mixed",
+    "category": "hard_negative_link",
+    "why": "Normal Arabic-English meeting link."
+  },
+  {
+    "id": "mixed_es_en_normal",
+    "text": "Nos vemos mañana at 6 PM. Bring the tickets, por favor.",
+    "label": "ham",
+    "language": "mixed",
+    "category": "hard_negative_personal",
+    "why": "Normal Spanish-English personal message."
+  }
+]
