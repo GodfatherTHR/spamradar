@@ -694,7 +694,7 @@ def _realistic_subset(df: pd.DataFrame, spam_prior: float, seed: int) -> pd.Data
 
 def _write_data_card(path: Path, stats: dict, config: dict) -> None:
     lines = [
-        "# Dataset Card — Multilingual Spam & Scam Detection",
+        "# Dataset Card – Multilingual Spam & Scam Detection",
         "",
         f"Generated with seed **{config['project']['seed']}**.",
         "",

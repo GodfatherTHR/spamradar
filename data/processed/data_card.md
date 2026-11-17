@@ -1,4 +1,4 @@
-# Dataset Card — Multilingual Spam & Scam Detection
+# Dataset Card – Multilingual Spam & Scam Detection
 
 Generated with seed **42**.
 

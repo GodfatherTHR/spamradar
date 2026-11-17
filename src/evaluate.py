@@ -422,7 +422,7 @@ def write_report(
     thresholds: dict,
 ) -> None:
     lines = [
-        "# Evaluation report — Multilingual Spam & Scam Detection",
+        "# Evaluation report – Multilingual Spam & Scam Detection",
         "",
         f"Generated: `{evaluation['generated_at']}`",
         "",

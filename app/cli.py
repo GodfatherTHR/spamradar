@@ -37,7 +37,7 @@ def render_prediction(result: dict, show_cues: bool = True) -> None:
 
     console.print(f"[bold]Explanation:[/bold] {result['explanation']}")
     console.print(
-        f"[dim]Scores — logistic={result['scores']['lexical_logistic']:.4f}, "
+        f"[dim]Scores – logistic={result['scores']['lexical_logistic']:.4f}, "
         f"semantic={result['scores']['semantic'] if result['scores']['semantic'] is not None else 'n/a'}, "
         f"heuristic={result['scores']['heuristic']:.4f}[/dim]"
     )

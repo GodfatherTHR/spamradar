@@ -1,4 +1,4 @@
-# Evaluation report — Multilingual Spam & Scam Detection
+# Evaluation report – Multilingual Spam & Scam Detection
 
 Generated: `2026-11-16T22:28:46.953334+00:00`
 

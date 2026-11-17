@@ -9,7 +9,6 @@ authors:
 year: 2026
 url: "https://github.com/GodfatherTHR/spamradar"
 repository-code: "https://github.com/GodfatherTHR/spamradar"
-license: null
 keywords:
   - multilingual spam detection
   - smishing

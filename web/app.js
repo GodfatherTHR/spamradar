@@ -32,12 +32,12 @@ function escapeHtml(value) {
 
 function formatNumber(value) {
   const number = Number(value);
-  return Number.isFinite(number) ? new Intl.NumberFormat().format(number) : "—";
+  return Number.isFinite(number) ? new Intl.NumberFormat().format(number) : "–";
 }
 
 function formatPct(value, digits = 1) {
   const number = Number(value);
-  return Number.isFinite(number) ? `${(number * 100).toFixed(digits)}%` : "—";
+  return Number.isFinite(number) ? `${(number * 100).toFixed(digits)}%` : "–";
 }
 
 function clamp01(value) {
@@ -141,7 +141,7 @@ function addRecent(text) {
 
 function scoreCard(label, value, barValue, suffix = "") {
   const display = value === null || value === undefined || Number.isNaN(Number(value))
-    ? "—"
+    ? "–"
     : `${Number(value).toFixed(3)}${suffix}`;
   return `
     <div class="score-card">
@@ -224,7 +224,7 @@ function renderResult(data) {
   const semanticBox = $("#semanticMatch");
   if (data.semantic_match) {
     semanticBox.classList.remove("hidden");
-    semanticBox.innerHTML = `<strong>Semantic match ${Number(data.semantic_match.similarity).toFixed(3)}</strong> — ${escapeHtml(data.semantic_match.prototype)}`;
+    semanticBox.innerHTML = `<strong>Semantic match ${Number(data.semantic_match.similarity).toFixed(3)}</strong> – ${escapeHtml(data.semantic_match.prototype)}`;
   } else {
     semanticBox.classList.add("hidden");
     semanticBox.innerHTML = "";
@@ -289,7 +289,7 @@ async function batchAnalyze() {
     tbody.innerHTML = "";
     data.predictions.forEach((prediction, index) => {
       const source = messages[index] || "";
-      const topSignal = prediction.detected_signals?.[0]?.title || "—";
+      const topSignal = prediction.detected_signals?.[0]?.title || "–";
       const tier = TIER_LABEL[prediction.label] || "normal";
       const row = document.createElement("tr");
       row.innerHTML = `
@@ -331,12 +331,12 @@ function renderModel(stats) {
   $("#modelDetails").innerHTML = [
     detailRow("Model type", model.model_type || "hybrid lexical + semantic"),
     detailRow("Multilingual backbone", semantic?.model_name || "not loaded"),
-    detailRow("Semantic embedding", semantic ? `${semantic.embedding_dim} dims` : "—"),
-    detailRow("Lexical features", lexical.feature_count ? formatNumber(lexical.feature_count) : "—"),
-    detailRow("Best lexical C", lexical.best_C ?? "—"),
-    detailRow("Training rows", stats.dataset?.label_by_split?.train?.rows ? formatNumber(stats.dataset.label_by_split.train.rows) : "—"),
-    detailRow("Spam threshold", thresholds.spam_threshold ? Number(thresholds.spam_threshold).toFixed(4) : "—"),
-    detailRow("Review threshold", thresholds.suspicious_threshold ? Number(thresholds.suspicious_threshold).toFixed(4) : "—"),
+    detailRow("Semantic embedding", semantic ? `${semantic.embedding_dim} dims` : "–"),
+    detailRow("Lexical features", lexical.feature_count ? formatNumber(lexical.feature_count) : "–"),
+    detailRow("Best lexical C", lexical.best_C ?? "–"),
+    detailRow("Training rows", stats.dataset?.label_by_split?.train?.rows ? formatNumber(stats.dataset.label_by_split.train.rows) : "–"),
+    detailRow("Spam threshold", thresholds.spam_threshold ? Number(thresholds.spam_threshold).toFixed(4) : "–"),
+    detailRow("Review threshold", thresholds.suspicious_threshold ? Number(thresholds.suspicious_threshold).toFixed(4) : "–"),
     detailRow("Calibration", "validation stacker · 20% prior"),
   ].join("");
 
@@ -353,7 +353,7 @@ function renderModel(stats) {
     ["Accuracy", metrics.accuracy],
   ];
   $("#metricGrid").innerHTML = cards.map(([label, value]) => {
-    let display = "—";
+    let display = "–";
     if (value !== undefined && value !== null && Number.isFinite(Number(value))) {
       display = label === "PR-AUC" || label === "ROC-AUC" || label === "F1" || label === "Recall" || label === "Precision" || label === "Accuracy"
         ? formatPct(value)
